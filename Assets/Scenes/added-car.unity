@@ -502,14 +502,14 @@ MonoBehaviour:
   motorForce: 1000
   breakForce: 3000
   maxSteerAngle: 30
-  frontLeftWheelCollider: {fileID: 0}
-  frontRightWheelCollider: {fileID: 0}
-  rearLeftWheelCollider: {fileID: 0}
-  rearRightWheelCollider: {fileID: 0}
-  frontLeftWheelTransform: {fileID: 0}
-  frontRightWheeTransform: {fileID: 0}
-  rearLeftWheelTransform: {fileID: 0}
-  rearRightWheelTransform: {fileID: 0}
+  frontLeftWheelCollider: {fileID: 990091705}
+  frontRightWheelCollider: {fileID: 1191484742}
+  rearLeftWheelCollider: {fileID: 179824424}
+  rearRightWheelCollider: {fileID: 2052230947}
+  frontLeftWheelTransform: {fileID: 1246893636}
+  frontRightWheelTransform: {fileID: 856318831}
+  rearLeftWheelTransform: {fileID: 934373313}
+  rearRightWheelTransform: {fileID: 1757949885}
 --- !u!1 &179824422
 GameObject:
   m_ObjectHideFlags: 0
@@ -1924,7 +1924,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1610265466720824, guid: 02e641040fb499c49a848e40f535164a, type: 3}
       propertyPath: m_TagString
-      value: Player
+      value: GameController
       objectReference: {fileID: 0}
     - target: {fileID: 1977516303058092, guid: 02e641040fb499c49a848e40f535164a, type: 3}
       propertyPath: m_Name
@@ -2568,6 +2568,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 674414263}
+  - component: {fileID: 674414264}
   m_Layer: 0
   m_Name: CaptchaUI-----------------------
   m_TagString: Untagged
@@ -2591,6 +2592,24 @@ Transform:
   - {fileID: 1918950981}
   m_Father: {fileID: 903888998}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &674414264
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 674414262}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5e10d5160c75f488180dbba6a9472c15, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CaptchaUI
+  uiCodeImage: {fileID: 711461230}
+  uiCodeInput: {fileID: 1966146421}
+  uiErrorsText: {fileID: 1404714238}
+  uiRefreshButton: {fileID: 978627410}
+  uiSubmitButton: {fileID: 381818772}
+  captchaGenerator: {fileID: 0}
 --- !u!1 &696736129
 GameObject:
   m_ObjectHideFlags: 0
@@ -3772,7 +3791,7 @@ GameObject:
   - component: {fileID: 938931017}
   - component: {fileID: 938931016}
   m_Layer: 0
-  m_Name: Text (TMP)
+  m_Name: Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4215,7 +4234,7 @@ MonoBehaviour:
   rearLeftWheelCollider: {fileID: 179824424}
   rearRightWheelCollider: {fileID: 2052230947}
   frontLeftWheelTransform: {fileID: 1246893636}
-  frontRightWheeTransform: {fileID: 856318831}
+  frontRightWheelTransform: {fileID: 856318831}
   rearLeftWheelTransform: {fileID: 934373313}
   rearRightWheelTransform: {fileID: 1757949885}
 --- !u!65 &997224181
@@ -4233,7 +4252,7 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
@@ -4247,7 +4266,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 997224177}
   serializedVersion: 5
-  m_Mass: 700
+  m_Mass: 500
   m_LinearDamping: 0
   m_AngularDamping: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
@@ -5189,7 +5208,7 @@ GameObject:
   - component: {fileID: 1152501868}
   - component: {fileID: 1152501867}
   m_Layer: 0
-  m_Name: Text (TMP)
+  m_Name: Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5811,7 +5830,6 @@ GameObject:
   - component: {fileID: 1302249341}
   - component: {fileID: 1302249340}
   - component: {fileID: 1302249339}
-  - component: {fileID: 1302249343}
   - component: {fileID: 1302249344}
   m_Layer: 0
   m_Name: Cube (1)
@@ -5913,24 +5931,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1302249343
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1302249338}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e59a473282a56084383bbcc942dddabe, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::CaptchaUI
-  uiCodeImage: {fileID: 0}
-  uiCodeInput: {fileID: 0}
-  uiErrorsText: {fileID: 0}
-  uiRefreshButton: {fileID: 0}
-  uiSubmitButton: {fileID: 0}
-  captchaGenerator: {fileID: 0}
 --- !u!114 &1302249344
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6422,7 +6422,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1404714237
 RectTransform:
   m_ObjectHideFlags: 0
@@ -10329,7 +10329,7 @@ GameObject:
   - component: {fileID: 1966146422}
   - component: {fileID: 1966146421}
   m_Layer: 0
-  m_Name: InputField (TMP)
+  m_Name: InputField
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -1,11 +1,12 @@
 using UnityEngine ;
 using UnityEngine.UI ;
+using TMPro;
 
 public class CaptchaUI : MonoBehaviour {
    [Header ("UI References :")]
    [SerializeField] private Image uiCodeImage ;
-   [SerializeField] private InputField uiCodeInput ;
-   [SerializeField] private Text uiErrorsText ;
+[SerializeField] private TMP_InputField uiCodeInput ;
+   [SerializeField] private TextMeshProUGUI uiErrorsText ;
    [SerializeField] private Button uiRefreshButton ;
    [SerializeField] private Button uiSubmitButton ;
 
