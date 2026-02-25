@@ -56,9 +56,9 @@ public class CaptchaTrigger : MonoBehaviour
 
                 if (uiGameObject != null)
                 {
-                    uiGameObject.SetActive(false);
-                }
 
+                    Destroy(gameObject);  // Completely destroy the cube
+                }
                 gameObject.SetActive(true);
             }
         }
