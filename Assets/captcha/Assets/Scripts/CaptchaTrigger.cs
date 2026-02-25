@@ -56,10 +56,15 @@ public class CaptchaTrigger : MonoBehaviour
 
                 if (uiGameObject != null)
                 {
-
-                    Destroy(gameObject);  // Completely destroy the cube
+                    uiGameObject.SetActive(false);
                 }
-                gameObject.SetActive(true);
+
+                // Destroy all colliders on object and children
+                foreach (Collider col in GetComponentsInChildren<Collider>())
+                {
+                    Destroy(col);
+                }
+                Destroy(gameObject); // destroy the cube
             }
         }
     }
