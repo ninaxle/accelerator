@@ -1928,7 +1928,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1610265466720824, guid: 02e641040fb499c49a848e40f535164a, type: 3}
       propertyPath: m_TagString
-      value: GameController
+      value: Player
       objectReference: {fileID: 0}
     - target: {fileID: 1977516303058092, guid: 02e641040fb499c49a848e40f535164a, type: 3}
       propertyPath: m_Name
@@ -1994,6 +1994,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 997224180}
+    - targetCorrespondingSourceObject: {fileID: 1610265466720824, guid: 02e641040fb499c49a848e40f535164a,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 997224184}
   m_SourcePrefab: {fileID: 100100000, guid: 02e641040fb499c49a848e40f535164a, type: 3}
 --- !u!134 &493423757
 PhysicsMaterial:
@@ -2574,7 +2578,7 @@ GameObject:
   - component: {fileID: 674414263}
   - component: {fileID: 674414264}
   m_Layer: 0
-  m_Name: CaptchaUI-----------------------
+  m_Name: CaptchaUI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3109,7 +3113,7 @@ Transform:
   m_GameObject: {fileID: 761164177}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -7.3461018, y: 0.06819171, z: -0.008501798}
+  m_LocalPosition: {x: -7.3461018, y: 0.135, z: -0.008501798}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -4260,8 +4264,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1.08, y: 1.15, z: 4.31}
-  m_Center: {x: 0, y: 0.37, z: -0.04}
+  m_Size: {x: 1.08, y: 1.2263778, z: 4.7388916}
+  m_Center: {x: 0, y: 0.408189, z: -0.089939594}
 --- !u!54 &997224182
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -4289,6 +4293,21 @@ Rigidbody:
   m_Interpolate: 1
   m_Constraints: 0
   m_CollisionDetection: 1
+--- !u!114 &997224184
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 997224177}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc95386d03bee414588cb0f5c2c3ec42, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CaptchaTrigger
+  uiGameObject: {fileID: 0}
+  captchaUIComponent: {fileID: 0}
+  carController: {fileID: 997224180}
 --- !u!1 &1017526567
 GameObject:
   m_ObjectHideFlags: 0
@@ -5852,12 +5871,12 @@ BoxCollider:
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 32
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
@@ -5942,12 +5961,13 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1302249338}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: dc95386d03bee414588cb0f5c2c3ec42, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CaptchaTrigger
-  uiGameObjectName: UI
+  uiGameObject: {fileID: 903888997}
+  captchaUIComponent: {fileID: 674414264}
   carController: {fileID: 997224180}
 --- !u!43 &1326810670
 Mesh:
@@ -11654,8 +11674,8 @@ SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
   - {fileID: 1093744790}
-  - {fileID: 492761323}
   - {fileID: 145707512}
+  - {fileID: 492761323}
   - {fileID: 526790848}
   - {fileID: 903888998}
   - {fileID: 1302249342}

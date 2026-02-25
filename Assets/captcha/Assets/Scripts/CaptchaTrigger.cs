@@ -2,38 +2,42 @@ using UnityEngine;
 
 public class CaptchaTrigger : MonoBehaviour
 {
-    [SerializeField] private string uiGameObjectName = "UI";
+    [SerializeField] private GameObject uiGameObject;
+    [SerializeField] private CaptchaUI captchaUIComponent;
     [SerializeField] private CarController carController;
 
-    private GameObject uiGameObject;
-    private CaptchaUI captchaUIComponent;
     private bool captchaActive = false;
     private bool hasTriggered = false;
 
     private void Start()
     {
-        uiGameObject = GameObject.Find(uiGameObjectName);
-
         if (uiGameObject != null)
         {
             uiGameObject.SetActive(false);
-
-            Transform captchaChild = uiGameObject.transform.Find("CaptchaUI");
-            if (captchaChild != null)
-            {
-                captchaUIComponent = captchaChild.GetComponent<CaptchaUI>();
-            }
+            Debug.Log("CaptchaTrigger: UI assigned and hidden");
         }
     }
 
-    private void OnTriggerEnter(Collider other)
+    private void OnCollisionEnter(Collision collision)
     {
-        if (other.CompareTag("Player") && !hasTriggered && uiGameObject != null)
+        Debug.Log("CaptchaTrigger: Hit by: " + collision.gameObject.name);
+
+        if (collision.gameObject.CompareTag("Player") && !hasTriggered)
         {
             hasTriggered = true;
             captchaActive = true;
-            carController.enabled = false;
-            uiGameObject.SetActive(true);
+
+            if (carController != null)
+            {
+                carController.enabled = false;
+                Debug.Log("CaptchaTrigger: Car disabled");
+            }
+
+            if (uiGameObject != null)
+            {
+                uiGameObject.SetActive(true);
+                Debug.Log("CaptchaTrigger: UI showing");
+            }
         }
     }
 
@@ -44,9 +48,18 @@ public class CaptchaTrigger : MonoBehaviour
             if (captchaUIComponent.IsSolved)
             {
                 captchaActive = false;
-                carController.enabled = true;
-                uiGameObject.SetActive(false);
-                gameObject.SetActive(false);
+
+                if (carController != null)
+                {
+                    carController.enabled = true;
+                }
+
+                if (uiGameObject != null)
+                {
+                    uiGameObject.SetActive(false);
+                }
+
+                gameObject.SetActive(true);
             }
         }
     }
