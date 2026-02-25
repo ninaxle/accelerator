@@ -12,8 +12,8 @@ public class CarController : MonoBehaviour
     private float verticalInput;
     private float currentSteerAngle;
     private float currentbreakForce;
-    [SerializeField] private float boostMultiplier = 3f;  // 3x faster when boosting
-private bool isBoosting;
+    [SerializeField] private float boostMultiplier = 2f;  // 2x faster when boosting
+    private bool isBoosting;
 
     private bool isBreaking; //brake when space is pressed --will probs remove...
 
@@ -33,7 +33,7 @@ private bool isBoosting;
 
     private void FixedUpdate()
     {
-        GetInput(); 
+        GetInput();
         HandleMotor();
         HandleSteering(); //rotate the wheels
         UpdateWheels();
@@ -51,9 +51,9 @@ private bool isBoosting;
 
     private void HandleMotor()
     {
-    float currentMotorForce = isBoosting ? motorForce * boostMultiplier : motorForce;
-    frontLeftWheelCollider.motorTorque = Mathf.Max(0, verticalInput) * currentMotorForce;
-    frontRightWheelCollider.motorTorque = Mathf.Max(0, verticalInput) * currentMotorForce; 
+        float currentMotorForce = isBoosting ? motorForce * boostMultiplier : motorForce;
+        frontLeftWheelCollider.motorTorque = Mathf.Max(0, verticalInput) * currentMotorForce;
+        frontRightWheelCollider.motorTorque = Mathf.Max(0, verticalInput) * currentMotorForce;
 
         // currentbreakForce = isBreaking ? breakForce : 0f; //if space is pressed, apply break force, else no break force
         // ApplyBreaking();       
@@ -86,7 +86,7 @@ private bool isBoosting;
     {
         Vector3 pos;
         Quaternion rot
-;       wheelCollider.GetWorldPose(out pos, out rot);
+; wheelCollider.GetWorldPose(out pos, out rot);
         wheelTransform.rotation = rot;
         wheelTransform.position = pos;
     }
