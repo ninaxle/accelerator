@@ -14,19 +14,19 @@ public class CaptchaImage : MonoBehaviour
 
     [Header("Sprite Sets :")]
     [SerializeField] private Sprite[] bikesSprites;
-    // [SerializeField] private Sprite[] dataSprites;
-    // [SerializeField] private Sprite[] dogSprites;
-    // [SerializeField] private Sprite[] humanSprites;
-    // [SerializeField] private Sprite[] peopleSprites;
-    // [SerializeField] private Sprite[] streetSprites;
+    [SerializeField] private Sprite[] dataSprites;
+    [SerializeField] private Sprite[] dogSprites;
+    [SerializeField] private Sprite[] humanSprites;
+    [SerializeField] private Sprite[] peopleSprites;
+    [SerializeField] private Sprite[] streetSprites;
 
     [Header("Instructions :")]
     [SerializeField] private string bikesInstruction = "Select all the bikes";
-    // [SerializeField] private string dataInstruction = "Select all the trees";
-    // [SerializeField] private string dogInstruction = "Select all the dogs";
-    // [SerializeField] private string humanInstruction = "Select the humans";
-    // [SerializeField] private string peopleInstruction = "Select the people";
-    // [SerializeField] private string streetInstruction = "Select the sidewalks";
+    [SerializeField] private string dataInstruction = "Select all the trees";
+    [SerializeField] private string dogInstruction = "Select all the dogs";
+    [SerializeField] private string humanInstruction = "Select the humans";
+    [SerializeField] private string peopleInstruction = "Select the people";
+    [SerializeField] private string streetInstruction = "Select the sidewalks";
 
     [Header("Settings :")]
     [SerializeField] private Color selectedColor = new Color(0, 0, 1, 0.25f);
@@ -73,11 +73,11 @@ public class CaptchaImage : MonoBehaviour
         // Build list of available sets
         List<int> availableSets = new List<int>();
         if (bikesSprites != null && bikesSprites.Length > 0) availableSets.Add(0);
-        // if (dataSprites != null && dataSprites.Length > 0) availableSets.Add(1);
-        // if (dogSprites != null && dogSprites.Length > 0) availableSets.Add(2);
-        // if (humanSprites != null && humanSprites.Length > 0) availableSets.Add(3);
-        // if (peopleSprites != null && peopleSprites.Length > 0) availableSets.Add(4);
-        // if (streetSprites != null && streetSprites.Length > 0) availableSets.Add(5);
+        if (dataSprites != null && dataSprites.Length > 0) availableSets.Add(1);
+        if (dogSprites != null && dogSprites.Length > 0) availableSets.Add(2);
+        if (humanSprites != null && humanSprites.Length > 0) availableSets.Add(3);
+        if (peopleSprites != null && peopleSprites.Length > 0) availableSets.Add(4);
+        if (streetSprites != null && streetSprites.Length > 0) availableSets.Add(5);
 
         if (availableSets.Count == 0)
         {
@@ -95,26 +95,26 @@ public class CaptchaImage : MonoBehaviour
                 currentSpriteSet = bikesSprites;
                 instructionText.text = bikesInstruction;
                 break;
-                // case 1:
-                //     currentSpriteSet = dataSprites;
-                //     instructionText.text = dataInstruction;
-                //     break;
-                // case 2:
-                //     currentSpriteSet = dogSprites;
-                //     instructionText.text = dogInstruction;
-                //     break;
-                // case 3:
-                //     currentSpriteSet = humanSprites;
-                //     instructionText.text = humanInstruction;
-                //     break;
-                // case 4:
-                //     currentSpriteSet = peopleSprites;
-                //     instructionText.text = peopleInstruction;
-                //     break;
-                // case 5:
-                //     currentSpriteSet = streetSprites;
-                //     instructionText.text = streetInstruction;
-                //     break;
+            case 1:
+                currentSpriteSet = dataSprites;
+                instructionText.text = dataInstruction;
+                break;
+            case 2:
+                currentSpriteSet = dogSprites;
+                instructionText.text = dogInstruction;
+                break;
+            case 3:
+                currentSpriteSet = humanSprites;
+                instructionText.text = humanInstruction;
+                break;
+            case 4:
+                currentSpriteSet = peopleSprites;
+                instructionText.text = peopleInstruction;
+                break;
+            case 5:
+                currentSpriteSet = streetSprites;
+                instructionText.text = streetInstruction;
+                break;
         }
 
         // Assign sprites to image slots
