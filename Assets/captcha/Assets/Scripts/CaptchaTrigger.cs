@@ -3,11 +3,11 @@ using UnityEngine;
 public class CaptchaTrigger : MonoBehaviour
 {
     [SerializeField] private GameObject uiGameObject;
-    [SerializeField] private CaptchaUI captchaUIComponent;
     [SerializeField] private CarController carController;
 
     private bool captchaActive = false;
     private bool hasTriggered = false;
+    private MonoBehaviour captchaComponent;
 
     private void Start()
     {
@@ -15,6 +15,21 @@ public class CaptchaTrigger : MonoBehaviour
         {
             uiGameObject.SetActive(false);
             Debug.Log("CaptchaTrigger: UI assigned and hidden");
+        }
+
+        // Try to find either CaptchaUI or CaptchaImage component on the UI object
+        if (uiGameObject != null)
+        {
+            captchaComponent = uiGameObject.GetComponent<CaptchaUI>();
+            if (captchaComponent == null)
+            {
+                captchaComponent = uiGameObject.GetComponent<CaptchaImage>();
+            }
+
+            if (captchaComponent != null)
+            {
+                Debug.Log("CaptchaTrigger: Found captcha component: " + captchaComponent.GetType().Name);
+            }
         }
     }
 
@@ -43,28 +58,34 @@ public class CaptchaTrigger : MonoBehaviour
 
     private void Update()
     {
-        if (captchaActive && captchaUIComponent != null)
+        if (captchaActive && captchaComponent != null)
         {
-            if (captchaUIComponent.IsSolved)
+            // Check if IsSolved is true (works for both CaptchaUI and CaptchaImage)
+            if (captchaComponent.GetType().GetProperty("IsSolved") != null)
             {
-                captchaActive = false;
+                bool isSolved = (bool)captchaComponent.GetType().GetProperty("IsSolved").GetValue(captchaComponent, null);
 
-                if (carController != null)
+                if (isSolved)
                 {
-                    carController.enabled = true;
-                }
+                    captchaActive = false;
 
-                if (uiGameObject != null)
-                {
-                    uiGameObject.SetActive(false);
-                }
+                    if (carController != null)
+                    {
+                        carController.enabled = true;
+                    }
 
-                // Destroy all colliders on object and children
-                foreach (Collider col in GetComponentsInChildren<Collider>())
-                {
-                    Destroy(col);
+                    if (uiGameObject != null)
+                    {
+                        uiGameObject.SetActive(false);
+                    }
+
+                    // Destroy all colliders on object and children
+                    foreach (Collider col in GetComponentsInChildren<Collider>())
+                    {
+                        Destroy(col);
+                    }
+                    Destroy(gameObject); // destroy the cube
                 }
-                Destroy(gameObject); // destroy the cube
             }
         }
     }
