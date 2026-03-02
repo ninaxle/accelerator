@@ -47,7 +47,6 @@ public class CaptchaUI : MonoBehaviour
          uiErrorsText.gameObject.SetActive(false);
          Debug.Log("<color=green>Valid Code </color>");
          IsSolved = true;
-         gameObject.SetActive(false);
       }
       else
       {

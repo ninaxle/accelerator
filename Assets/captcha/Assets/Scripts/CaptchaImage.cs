@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System.Collections.Generic;
 
 public class CaptchaImage : MonoBehaviour
 {
@@ -9,7 +10,7 @@ public class CaptchaImage : MonoBehaviour
     [SerializeField] private TextMeshProUGUI errorText;
 
     [Header("Image Grid :")]
-    [SerializeField] private Image[] imageSlots; // 16 image slots for 4x4 grid
+    [SerializeField] private Image[] imageSlots;
 
     [Header("Sprite Sets :")]
     [SerializeField] private Sprite[] bikesSprites;
@@ -27,16 +28,27 @@ public class CaptchaImage : MonoBehaviour
     // [SerializeField] private string peopleInstruction = "Select the people";
     // [SerializeField] private string streetInstruction = "Select the sidewalks";
 
+    [Header("Settings :")]
+    [SerializeField] private Color selectedColor = new Color(0, 0, 1, 0.25f);
+
     private Sprite[] currentSpriteSet;
+    private bool[] selectedSlots;
+    private Color[] originalColors;
     public bool IsSolved { get; private set; }
 
     private void Start()
     {
         IsSolved = false;
 
-        // click listeners to all image slots
+        // Initialize selection tracking
+        selectedSlots = new bool[imageSlots.Length];
+        originalColors = new Color[imageSlots.Length];
+
+        // Add click listeners and store original colors
         for (int i = 0; i < imageSlots.Length; i++)
         {
+            originalColors[i] = imageSlots[i].color;
+
             int index = i;
             Button btn = imageSlots[i].GetComponent<Button>();
             if (btn == null)
@@ -51,9 +63,15 @@ public class CaptchaImage : MonoBehaviour
 
     private void GenerateCaptcha()
     {
-        // a list of only the sprite sets that are actually assigned
-        System.Collections.Generic.List<int> availableSets = new System.Collections.Generic.List<int>();
+        // Reset selections
+        for (int i = 0; i < selectedSlots.Length; i++)
+        {
+            selectedSlots[i] = false;
+            imageSlots[i].color = originalColors[i];
+        }
 
+        // Build list of available sets
+        List<int> availableSets = new List<int>();
         if (bikesSprites != null && bikesSprites.Length > 0) availableSets.Add(0);
         // if (dataSprites != null && dataSprites.Length > 0) availableSets.Add(1);
         // if (dogSprites != null && dogSprites.Length > 0) availableSets.Add(2);
@@ -61,46 +79,45 @@ public class CaptchaImage : MonoBehaviour
         // if (peopleSprites != null && peopleSprites.Length > 0) availableSets.Add(4);
         // if (streetSprites != null && streetSprites.Length > 0) availableSets.Add(5);
 
-        // If no sets are assigned, show error
         if (availableSets.Count == 0)
         {
             Debug.LogError("No sprite sets assigned to CaptchaImage!");
             return;
         }
 
-        // Randomly pick only from available sets
+        // Randomly pick from available sets
         int randomIndex = Random.Range(0, availableSets.Count);
         int randomSet = availableSets[randomIndex];
 
         switch (randomSet)
         {
-            case 0: // bikes
+            case 0:
                 currentSpriteSet = bikesSprites;
                 instructionText.text = bikesInstruction;
                 break;
-                // case 1: // data (trees)
+                // case 1:
                 //     currentSpriteSet = dataSprites;
                 //     instructionText.text = dataInstruction;
                 //     break;
-                // case 2: // dog
+                // case 2:
                 //     currentSpriteSet = dogSprites;
                 //     instructionText.text = dogInstruction;
                 //     break;
-                // case 3: // human
+                // case 3:
                 //     currentSpriteSet = humanSprites;
                 //     instructionText.text = humanInstruction;
                 //     break;
-                // case 4: // people
+                // case 4:
                 //     currentSpriteSet = peopleSprites;
                 //     instructionText.text = peopleInstruction;
                 //     break;
-                // case 5: // street (sidewalks)
+                // case 5:
                 //     currentSpriteSet = streetSprites;
                 //     instructionText.text = streetInstruction;
                 //     break;
         }
 
-        // Assign sprites to the 16 image slots
+        // Assign sprites to image slots
         for (int i = 0; i < imageSlots.Length; i++)
         {
             if (currentSpriteSet != null && i < currentSpriteSet.Length)
@@ -109,7 +126,7 @@ public class CaptchaImage : MonoBehaviour
             }
         }
 
-        // Hides error text
+        // Hide error text
         if (errorText != null)
         {
             errorText.gameObject.SetActive(false);
@@ -120,26 +137,70 @@ public class CaptchaImage : MonoBehaviour
     {
         if (IsSolved) return;
 
-        if (imageSlots[index].sprite != null)
-        {
-            string spriteName = imageSlots[index].sprite.name.ToLower();
+        // Toggle selection
+        selectedSlots[index] = !selectedSlots[index];
 
-            // Check if the clicked image contains "correct" in the name
+        // Apply color
+        if (selectedSlots[index])
+        {
+            imageSlots[index].color = selectedColor;
+        }
+        else
+        {
+            imageSlots[index].color = originalColors[index];
+        }
+
+        // Check selection after every click
+        CheckSelection();
+    }
+
+    private void CheckSelection()
+    {
+        int correctSelected = 0;
+        int wrongSelected = 0;
+        int totalCorrect = 0;
+
+        // Count correct and wrong in the current set
+        for (int i = 0; i < currentSpriteSet.Length; i++)
+        {
+            string spriteName = currentSpriteSet[i].name.ToLower();
             if (spriteName.Contains("correct"))
             {
-                // Correct!
-                Debug.Log("Correct image clicked!");
-                IsSolved = true;
-                gameObject.SetActive(false);
-            }
-            else
-            {
-                // Wrong - show error
-                Debug.Log("Wrong image clicked: " + spriteName);
-                if (errorText != null)
+                totalCorrect++;
+                if (selectedSlots[i])
                 {
-                    errorText.gameObject.SetActive(true);
+                    correctSelected++;
                 }
+            }
+            else if (spriteName.Contains("error"))
+            {
+                if (selectedSlots[i])
+                {
+                    wrongSelected++;
+                }
+            }
+        }
+
+        // Check if all correct are selected
+        if (correctSelected == totalCorrect && wrongSelected == 0)
+        {
+            // All correct selected, no wrong - PASS!
+            IsSolved = true;
+        }
+        // Check if 3 or more wrong are selected
+        else if (wrongSelected >= 3)
+        {
+            if (errorText != null)
+            {
+                errorText.gameObject.SetActive(true);
+            }
+        }
+        else
+        {
+            // Less than 3 wrong - hide error
+            if (errorText != null)
+            {
+                errorText.gameObject.SetActive(false);
             }
         }
     }

@@ -152,27 +152,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CaptchaTrigger
   uiGameObject: {fileID: 1847347893}
   carController: {fileID: 997224180}
---- !u!65 &45445384
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 45445382}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 0.19958162, y: 0.37289658, z: 0.611601}
-  m_Center: {x: 0.39665604, y: 0.187209, z: 0.2369082}
 --- !u!65 &45445385
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -194,6 +173,33 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.19958162, y: 1.4920974, z: 0.61160105}
   m_Center: {x: 0.39666158, y: -0.37239113, z: 0.23670378}
+--- !u!54 &45445389
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 45445382}
+  serializedVersion: 5
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1 &109522899
 GameObject:
   m_ObjectHideFlags: 0
@@ -604,6 +610,7 @@ MonoBehaviour:
   - {fileID: -670269765, guid: ed8fdfdecd1274a7593f86ae94a735b7, type: 3}
   - {fileID: 824107539, guid: ed8fdfdecd1274a7593f86ae94a735b7, type: 3}
   bikesInstruction: Select all the bikes
+  selectedColor: {r: 0, g: 0, b: 1, a: 0.5}
 --- !u!1 &179824422
 GameObject:
   m_ObjectHideFlags: 0
@@ -9418,7 +9425,7 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 12d45e5f656a1406288a783f774b0730,
         type: 3}
       insertIndex: -1
-      addedObject: {fileID: 45445384}
+      addedObject: {fileID: 45445389}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 12d45e5f656a1406288a783f774b0730,
         type: 3}
       insertIndex: -1
