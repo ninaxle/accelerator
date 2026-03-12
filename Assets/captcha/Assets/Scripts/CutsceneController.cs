@@ -46,6 +46,7 @@ public class CutsceneController : MonoBehaviour
     [Header("Game Objects :")]
     [SerializeField] private GameObject cutsceneCanvas;
     [SerializeField] private CarController carController;
+    [SerializeField] private WarningMessage warningMessage;
 
     [Header("Text-Only Settings :")]
     [SerializeField] private bool[] textOnlySlides = new bool[30];
@@ -55,7 +56,7 @@ public class CutsceneController : MonoBehaviour
     [SerializeField] private Vector2 normalImageSize = new Vector2(1920, 1080);
 
     [Header("Cover Image Settings :")]
-    [SerializeField][Range(0.1f, 1f)] private float coverScale = 0.2f;
+    [SerializeField][Range(0.1f, 3f)] private float coverScale = 1.5f;
     [SerializeField] private bool[] coverSlides = new bool[30];
 
     [Header("Background Colors :")]
@@ -171,36 +172,24 @@ public class CutsceneController : MonoBehaviour
             backgroundPanel.color = isBlueSlide ? blueBackgroundColor : mainBackgroundColor;
         }
 
-        bool isSlide1 = (currentImageIndex == 0);
-
         if (isCoverSlide)
         {
             if (cutsceneImage != null && imageRectTransform != null)
             {
                 cutsceneImage.enabled = true;
 
-                RectTransform canvasRect = cutsceneImage.canvas.GetComponent<RectTransform>();
-                float screenWidth = canvasRect.sizeDelta.x;
-                float screenHeight = canvasRect.sizeDelta.y;
+                // Scale image by coverScale multiplier
+                imageRectTransform.sizeDelta = originalImageSize * coverScale;
+                imageRectTransform.anchoredPosition = Vector2.zero;
+                imageRectTransform.anchorMin = new Vector2(0.5f, 0.5f);
+                imageRectTransform.anchorMax = new Vector2(0.5f, 0.5f);
 
-                Sprite sprite = sprites[0];
-                if (sprite != null)
+                if (currentImageIndex < sprites.Length && sprites[currentImageIndex] != null)
                 {
-                    float spriteWidth = sprite.rect.width;
-                    float spriteHeight = sprite.rect.height;
-
-                    float widthRatio = screenWidth / spriteWidth;
-                    float heightRatio = screenHeight / spriteHeight;
-                    float scale = Mathf.Max(widthRatio, heightRatio) * coverScale;
-
-                    imageRectTransform.sizeDelta = new Vector2(spriteWidth * scale, spriteHeight * scale);
-                    imageRectTransform.anchoredPosition = Vector2.zero;
-                    imageRectTransform.anchorMin = new Vector2(0.5f, 0.5f);
-                    imageRectTransform.anchorMax = new Vector2(0.5f, 0.5f);
-
-                    cutsceneImage.sprite = sprites[0];
+                    cutsceneImage.sprite = sprites[currentImageIndex];
                 }
             }
+            // Hide text for cover slides
             if (cutsceneText != null)
             {
                 cutsceneText.text = "";
@@ -238,7 +227,8 @@ public class CutsceneController : MonoBehaviour
             }
         }
 
-        if (!isSlide1)
+        // Show text for non-cover slides
+        if (!isCoverSlide)
         {
             if (currentImageIndex < allTexts.Length && allTexts[currentImageIndex] != null)
             {
@@ -314,6 +304,11 @@ public class CutsceneController : MonoBehaviour
         if (carController != null)
         {
             carController.enabled = true;
+        }
+
+        if (warningMessage != null)
+        {
+            warningMessage.ShowWarning();
         }
 
         Debug.Log("Cutscene ended, game started!");

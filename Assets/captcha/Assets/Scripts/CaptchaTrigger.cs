@@ -3,8 +3,8 @@ using System.Reflection;
 
 public class CaptchaTrigger : MonoBehaviour
 {
-    [SerializeField] private GameObject uiGameObject;
-    [SerializeField] private CarController carController;
+    [SerializeField] public GameObject uiGameObject;
+    [SerializeField] public CarController carController;
 
     private bool captchaActive = false;
     private bool hasTriggered = false;
