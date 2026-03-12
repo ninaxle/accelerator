@@ -9,7 +9,7 @@ public class CutsceneController : MonoBehaviour
     [SerializeField] private UnityEngine.UI.Image backgroundPanel;
 
     [Header("Sprite Setup :")]
-    [SerializeField] private Sprite[] sprites; // 11 images
+    [SerializeField] private Sprite[] sprites; // 30 images
 
     [Header("Text Setup :")]
     [SerializeField] private string[] image1Texts = new string[3] { "Text 1.1", "Text 1.2", "Text 1.3" };
@@ -23,13 +23,32 @@ public class CutsceneController : MonoBehaviour
     [SerializeField] private string[] image9Texts = new string[3] { "Text 9.1", "Text 9.2", "Text 9.3" };
     [SerializeField] private string[] image10Texts = new string[2] { "Text 10.1", "Text 10.2" };
     [SerializeField] private string[] image11Texts = new string[3] { "Text 11.1", "Text 11.2", "Text 11.3" };
+    [SerializeField] private string[] image12Texts = new string[2] { "Text 12.1", "Text 12.2" };
+    [SerializeField] private string[] image13Texts = new string[3] { "Text 13.1", "Text 13.2", "Text 13.3" };
+    [SerializeField] private string[] image14Texts = new string[2] { "Text 14.1", "Text 14.2" };
+    [SerializeField] private string[] image15Texts = new string[3] { "Text 15.1", "Text 15.2", "Text 15.3" };
+    [SerializeField] private string[] image16Texts = new string[2] { "Text 16.1", "Text 16.2" };
+    [SerializeField] private string[] image17Texts = new string[3] { "Text 17.1", "Text 17.2", "Text 17.3" };
+    [SerializeField] private string[] image18Texts = new string[2] { "Text 18.1", "Text 18.2" };
+    [SerializeField] private string[] image19Texts = new string[3] { "Text 19.1", "Text 19.2", "Text 19.3" };
+    [SerializeField] private string[] image20Texts = new string[2] { "Text 20.1", "Text 20.2" };
+    [SerializeField] private string[] image21Texts = new string[3] { "Text 21.1", "Text 21.2", "Text 21.3" };
+    [SerializeField] private string[] image22Texts = new string[2] { "Text 22.1", "Text 22.2" };
+    [SerializeField] private string[] image23Texts = new string[3] { "Text 23.1", "Text 23.2", "Text 23.3" };
+    [SerializeField] private string[] image24Texts = new string[2] { "Text 24.1", "Text 24.2" };
+    [SerializeField] private string[] image25Texts = new string[3] { "Text 25.1", "Text 25.2", "Text 25.3" };
+    [SerializeField] private string[] image26Texts = new string[2] { "Text 26.1", "Text 26.2" };
+    [SerializeField] private string[] image27Texts = new string[3] { "Text 27.1", "Text 27.2", "Text 27.3" };
+    [SerializeField] private string[] image28Texts = new string[2] { "Text 28.1", "Text 28.2" };
+    [SerializeField] private string[] image29Texts = new string[3] { "Text 29.1", "Text 29.2", "Text 29.3" };
+    [SerializeField] private string[] image30Texts = new string[2] { "Text 30.1", "Text 30.2" };
 
     [Header("Game Objects :")]
     [SerializeField] private GameObject cutsceneCanvas;
     [SerializeField] private CarController carController;
 
     [Header("Text-Only Settings :")]
-    [SerializeField] private bool[] textOnlySlides = new bool[11];
+    [SerializeField] private bool[] textOnlySlides = new bool[30];
     [SerializeField] private Vector2 textCenterPosition = new Vector2(0, 0);
 
     [Header("Normal Image Settings :")]
@@ -37,12 +56,12 @@ public class CutsceneController : MonoBehaviour
 
     [Header("Cover Image Settings :")]
     [SerializeField][Range(0.1f, 1f)] private float coverScale = 0.2f;
-    [SerializeField] private bool[] coverSlides = new bool[11];
+    [SerializeField] private bool[] coverSlides = new bool[30];
 
     [Header("Background Colors :")]
     [SerializeField] private Color mainBackgroundColor = Color.black;
     [SerializeField] private Color blueBackgroundColor = new Color(0.063f, 0.051f, 0.631f);
-    [SerializeField] private bool[] blueSlides = new bool[11];
+    [SerializeField] private bool[] blueSlides = new bool[30];
 
     private int currentImageIndex = 0;
     private int currentTextIndex = 0;
@@ -78,7 +97,7 @@ public class CutsceneController : MonoBehaviour
             storedOriginalImage = true;
         }
 
-        allTexts = new string[11][];
+        allTexts = new string[30][];
         allTexts[0] = image1Texts;
         allTexts[1] = image2Texts;
         allTexts[2] = image3Texts;
@@ -90,6 +109,25 @@ public class CutsceneController : MonoBehaviour
         allTexts[8] = image9Texts;
         allTexts[9] = image10Texts;
         allTexts[10] = image11Texts;
+        allTexts[11] = image12Texts;
+        allTexts[12] = image13Texts;
+        allTexts[13] = image14Texts;
+        allTexts[14] = image15Texts;
+        allTexts[15] = image16Texts;
+        allTexts[16] = image17Texts;
+        allTexts[17] = image18Texts;
+        allTexts[18] = image19Texts;
+        allTexts[19] = image20Texts;
+        allTexts[20] = image21Texts;
+        allTexts[21] = image22Texts;
+        allTexts[22] = image23Texts;
+        allTexts[23] = image24Texts;
+        allTexts[24] = image25Texts;
+        allTexts[25] = image26Texts;
+        allTexts[26] = image27Texts;
+        allTexts[27] = image28Texts;
+        allTexts[28] = image29Texts;
+        allTexts[29] = image30Texts;
 
         StartCutscene();
     }

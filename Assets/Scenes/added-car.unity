@@ -2118,7 +2118,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &477862049
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7571,18 +7571,27 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CutsceneController
   cutsceneImage: {fileID: 1205739809}
   cutsceneText: {fileID: 1585494193}
+  backgroundPanel: {fileID: 1159059929}
   sprites:
-  - {fileID: 21300000, guid: 6631694f571404520adcedcfd521e0de, type: 3}
+  - {fileID: 21300000, guid: b78dbb60de5734aee8fe04f7be70b535, type: 3}
   - {fileID: 21300000, guid: 6631694f571404520adcedcfd521e0de, type: 3}
   - {fileID: 21300000, guid: 6a7e91cfd456a445ebaf0b4ef2fd85c2, type: 3}
   - {fileID: 21300000, guid: 084ad6f3ee943418d8a3b3d276ff3e4e, type: 3}
   - {fileID: 21300000, guid: 084ad6f3ee943418d8a3b3d276ff3e4e, type: 3}
   - {fileID: 21300000, guid: 03f2d13bbfa6340c9a640526ed8f5742, type: 3}
+  - {fileID: 21300000, guid: 03f2d13bbfa6340c9a640526ed8f5742, type: 3}
   - {fileID: 21300000, guid: 510f81e65837d40debf24d7a0c2f02fe, type: 3}
+  - {fileID: 21300000, guid: 3f71dd1fb4e324944911726b3241f998, type: 3}
   - {fileID: 21300000, guid: 6ad2f0b71a3a941f686b338dd0f44dde, type: 3}
   - {fileID: 21300000, guid: 6ad2f0b71a3a941f686b338dd0f44dde, type: 3}
+  - {fileID: 21300000, guid: 01c5ee8ffd762478693d33aa83479fe4, type: 3}
   - {fileID: 21300000, guid: 6ad2f0b71a3a941f686b338dd0f44dde, type: 3}
-  - {fileID: 21300000, guid: 6ad2f0b71a3a941f686b338dd0f44dde, type: 3}
+  - {fileID: 21300000, guid: bea087de69de446c6b0402a903655cc1, type: 3}
+  - {fileID: 21300000, guid: 1d33b84adc37945cb8aa0bfd653e09e1, type: 3}
+  - {fileID: 21300000, guid: 1d33b84adc37945cb8aa0bfd653e09e1, type: 3}
+  - {fileID: 21300000, guid: 1d33b84adc37945cb8aa0bfd653e09e1, type: 3}
+  - {fileID: 21300000, guid: 1d33b84adc37945cb8aa0bfd653e09e1, type: 3}
+  - {fileID: 21300000, guid: 6631694f571404520adcedcfd521e0de, type: 3}
   image1Texts:
   - Text 1.1
   image2Texts:
@@ -7594,39 +7603,114 @@ MonoBehaviour:
     than ever before.
   image4Texts:
   - Tedbot, a leader in the robotic animal space, unveiled their fully-autonomous
-    and hyper-realistic dog at the 2040 Scalable Labs & Open Protocols Conference
-    (S.L.O.P.).
-  - 'Tedbot CEO came up with the idea for BOT based on his personal experience, losing
-    his former pet to climate change. '
+    and hyper-realistic dog at the 2040 Scalable Labs & Open Products Conference.
+  - 'Tedbot CEO came up with the idea for Bork based on his personal experience,
+    losing his former pet to climate change. '
   image5Texts:
   - Motivated by this gap, CEO set out to develop a robotic dog that could offer
     the same companionship without the risks.
   image6Texts:
-  - Thanks to cutting-edge technology, BOT looks, feels, and interacts just like
+  - Thanks to cutting-edge technology, Bork looks, feels, and interacts just like
     a real puppy.
   image7Texts:
-  - He has realistic, soft fur and head movements that mimic a real dog.
-  - 
+  - They have realistic, soft fur and head movements that mimic a real dog.
+  - Embedded touch sensors react to human touch  and intensity, producing dog reactions...
+  - Including authentic sounds recorded from ViewTube doggy complications.
   image8Texts:
-  - Text 8.1
-  - Text 8.2
+  - Despite their realistic appearance and behaviour, caring for a companion is much
+    simpler than ever before.
+  - Firstly, Bork is a self-cleaning companion, who brings convenience to everyday
+    life, thanks to their smart capacities.
   image9Texts:
-  - Text 9.1
-  - Text 9.2
-  - Text 9.3
+  - "They provide peace of mind by sending video updates to users' devices when they\u2019re
+    away from home."
+  - "They also play music and answers phone calls \u2013 even helping with summarization
+    and creative writing... "
+  - Bork makes life at home more productive and enjoyable.
   image10Texts:
-  - Text 10.1
-  - Text 10.2
+  - "Bork will be a man\u2019s best friend forever."
+  - 'They are the first companion ever known to be able to age and reverse its aging
+    process. '
   image11Texts:
-  - Text 11.1
-  - Text 11.2
-  - Text 11.3
+  - 'At the right time, they collapse into a blob of tissue and reverts back into
+    its juvenile puppy stage, becoming young all over again. '
+  image12Texts:
+  - "By embedding ethical and safety rules into the very core of its AI, Bork is
+    not only smart\u2014he\u2019s trustworthy."
+  - Their benefits can extend to a wide range of people. Bork can bring joy and emotional
+    support to residents who feel isolated.
+  - Bork provides a non-judgmental companion that helps reduce anxiety and stress.
+  image13Texts:
+  - 'According to the developers, Bork systems continuously monitor its environment,
+    assess risk, and prioritize human well-being over any programmed task. '
+  image14Texts:
+  - "This means that whether it\u2019s assisting an elderly person with mobility
+    or helping children with homework... "
+  image15Texts:
+  - Bork operates under a safety-first philosophy.
+  - 'Bork is the future of companionship and he is here to stay. '
+  image16Texts:
+  - ACCELETATOR
+  image17Texts:
+  - identity verification log...
+  image18Texts:
+  - "interaction-rhythm:analyzed\u2026response-timing:measured\u2026movement-patterns:
+    catalogued\u2026 task-approach-method:categorized\u2026error-pattern:documented\u2026 "
+  - 'STATUS:verification failed.CONFIDENCE MATCH:34.2% '
+  - 'STATUS:verification failed.CONFIDENCE MATCH:34.2% '
+  - ESCALATION:Flagged for terminal posthuman audit
+  image19Texts:
+  - "It doesn\u2019t think you, or anyone in this area belongs here. "
+  - "You are one of the few \u201Canomalies\u201D who hasn't gone missing yet."
+  - Leave this town IMMEDIATELY before it finds you.
+  image20Texts:
+  - Text 20.1
+  - Text 20.2
+  image21Texts:
+  - Text 21.1
+  - Text 21.2
+  - Text 21.3
+  image22Texts:
+  - Text 22.1
+  - Text 22.2
+  image23Texts:
+  - Text 23.1
+  - Text 23.2
+  - Text 23.3
+  image24Texts:
+  - Text 24.1
+  - Text 24.2
+  image25Texts:
+  - Text 25.1
+  - Text 25.2
+  - Text 25.3
+  image26Texts:
+  - Text 26.1
+  - Text 26.2
+  image27Texts:
+  - Text 27.1
+  - Text 27.2
+  - Text 27.3
+  image28Texts:
+  - Text 28.1
+  - Text 28.2
+  image29Texts:
+  - Text 29.1
+  - Text 29.2
+  - Text 29.3
+  image30Texts:
+  - Text 30.1
+  - Text 30.2
   cutsceneCanvas: {fileID: 1159059928}
   carController: {fileID: 997224180}
-  textOnlySlides: 0000000100000000000000
+  textOnlySlides: 00000001000100000000010000000001010101
   textCenterPosition: {x: 0, y: 0}
   normalImageSize: {x: 1920, y: 1080}
-  coverScale: 0.152
+  coverScale: 0.194
+  coverSlides: 01
+  mainBackgroundColor: {r: 0, g: 0, b: 0, a: 1}
+  blueBackgroundColor: {r: 0.063, g: 0.051, b: 0.631, a: 1}
+  blueSlides: 00000000000000000000010000000000010100
 --- !u!43 &1186133789
 Mesh:
   m_ObjectHideFlags: 0
