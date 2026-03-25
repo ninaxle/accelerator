@@ -1,5 +1,6 @@
 using UnityEngine;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 public class CutsceneController : MonoBehaviour
 {
@@ -312,5 +313,8 @@ public class CutsceneController : MonoBehaviour
         }
 
         Debug.Log("Cutscene ended, game started!");
+
+        // Switch to main game scene
+        SceneManager.LoadScene("added-car");
     }
 }
