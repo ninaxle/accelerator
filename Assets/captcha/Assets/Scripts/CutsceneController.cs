@@ -1,6 +1,7 @@
 using UnityEngine;
 using TMPro;
 using UnityEngine.SceneManagement;
+using System.Collections;
 
 public class CutsceneController : MonoBehaviour
 {
@@ -8,6 +9,14 @@ public class CutsceneController : MonoBehaviour
     [SerializeField] private UnityEngine.UI.Image cutsceneImage;
     [SerializeField] private TextMeshProUGUI cutsceneText;
     [SerializeField] private UnityEngine.UI.Image backgroundPanel;
+    [SerializeField] private GameObject continueIcon;
+
+    [Header("Typewriter Settings :")]
+    [SerializeField] private float typingSpeed = 0.05f;
+
+    [Header("Audio Settings :")]
+    [SerializeField] private AudioClip typingSound;
+    [SerializeField] private AudioSource audioSource;
 
     [Header("Sprite Setup :")]
     [SerializeField] private Sprite[] sprites; // 30 images
@@ -75,6 +84,10 @@ public class CutsceneController : MonoBehaviour
     private Vector2 originalImageSize;
     private bool storedOriginalImage = false;
     private Color originalBackgroundColor;
+    private bool isTyping = false;
+    private bool isTextComplete = false;
+    private string currentFullText = "";
+    private Coroutine typingCoroutine;
 
     private void Start()
     {
@@ -129,6 +142,10 @@ public class CutsceneController : MonoBehaviour
         allTexts[27] = image28Texts;
         allTexts[28] = image29Texts;
         allTexts[29] = image30Texts;
+
+        // Hide continue icon at start
+        if (continueIcon != null)
+            continueIcon.SetActive(false);
 
         StartCutscene();
     }
@@ -234,7 +251,12 @@ public class CutsceneController : MonoBehaviour
             {
                 if (currentTextIndex < allTexts[currentImageIndex].Length)
                 {
-                    cutsceneText.text = allTexts[currentImageIndex][currentTextIndex];
+                    string textToType = allTexts[currentImageIndex][currentTextIndex];
+                    
+                    // Start typewriter effect
+                    if (typingCoroutine != null)
+                        StopCoroutine(typingCoroutine);
+                    typingCoroutine = StartCoroutine(TypeText(textToType));
                 }
             }
         }
@@ -252,6 +274,22 @@ public class CutsceneController : MonoBehaviour
 
     private void AdvanceSlide()
     {
+        // If still typing, skip to end of text
+        if (isTyping)
+        {
+            if (typingCoroutine != null)
+                StopCoroutine(typingCoroutine);
+            
+            cutsceneText.text = currentFullText;
+            isTyping = false;
+            isTextComplete = true;
+            
+            if (continueIcon != null)
+                continueIcon.SetActive(true);
+            
+            return;
+        }
+
         bool isFillScreen = (currentImageIndex == 0);
 
         if (isFillScreen)
@@ -305,5 +343,41 @@ public class CutsceneController : MonoBehaviour
 
         // Switch to main game scene
         SceneManager.LoadScene("added-car");
+    }
+
+    private System.Collections.IEnumerator TypeText(string text)
+    {
+        isTyping = true;
+        isTextComplete = false;
+        currentFullText = text;
+        cutsceneText.text = "";
+
+        // Hide continue icon while typing
+        if (continueIcon != null)
+            continueIcon.SetActive(false);
+
+        // Type 3 characters at a time
+        int i = 0;
+        while (i < text.Length)
+        {
+            int count = Mathf.Min(3, text.Length - i);
+            cutsceneText.text += text.Substring(i, count);
+            i += 3;
+
+            // Play typing sound if assigned
+            if (typingSound != null && audioSource != null)
+            {
+                audioSource.PlayOneShot(typingSound);
+            }
+
+            yield return new WaitForSeconds(typingSpeed);
+        }
+
+        isTyping = false;
+        isTextComplete = true;
+
+        // Show continue icon when done
+        if (continueIcon != null)
+            continueIcon.SetActive(true);
     }
 }
