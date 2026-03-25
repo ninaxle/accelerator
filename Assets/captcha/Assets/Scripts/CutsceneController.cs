@@ -47,7 +47,6 @@ public class CutsceneController : MonoBehaviour
     [Header("Game Objects :")]
     [SerializeField] private GameObject cutsceneCanvas;
     [SerializeField] private CarController carController;
-    [SerializeField] private WarningMessage warningMessage;
 
     [Header("Text-Only Settings :")]
     [SerializeField] private bool[] textOnlySlides = new bool[30];
@@ -302,17 +301,7 @@ public class CutsceneController : MonoBehaviour
             cutsceneCanvas.SetActive(false);
         }
 
-        if (carController != null)
-        {
-            carController.enabled = true;
-        }
-
-        if (warningMessage != null)
-        {
-            warningMessage.ShowWarning();
-        }
-
-        Debug.Log("Cutscene ended, game started!");
+        Debug.Log("Cutscene ended, loading main game!");
 
         // Switch to main game scene
         SceneManager.LoadScene("added-car");

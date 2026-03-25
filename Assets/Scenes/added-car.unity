@@ -7003,8 +7003,7 @@ Transform:
   m_LocalPosition: {x: 10.005526, y: 1.1284294, z: 0.23026167}
   m_LocalScale: {x: 1, y: 1, z: 20}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 1699445076}
+  m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1093744793
@@ -12866,7 +12865,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1973072518}
-  m_Father: {fileID: 1093744790}
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -13691,6 +13690,7 @@ GameObject:
   - component: {fileID: 1834831308}
   - component: {fileID: 1834831307}
   - component: {fileID: 1834831306}
+  - component: {fileID: 1834831310}
   m_Layer: 5
   m_Name: container-filter
   m_TagString: Untagged
@@ -13781,6 +13781,22 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &1834831310
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1834831305}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 09e5c049313664581b1ad35aa19ab658, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GameStartMessage
+  instructionUI: {fileID: 1699445075}
+  warningUI: {fileID: 1973072517}
+  carController: {fileID: 997224180}
+  delay: 3
 --- !u!1 &1847347893
 GameObject:
   m_ObjectHideFlags: 0
@@ -15937,6 +15953,7 @@ SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
   - {fileID: 1093744790}
+  - {fileID: 1699445076}
   - {fileID: 1834831309}
   - {fileID: 145707512}
   - {fileID: 492761323}
