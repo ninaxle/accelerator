@@ -3,6 +3,7 @@ using TMPro;
 using UnityEngine.SceneManagement;
 using System.Collections;
 
+
 public class CutsceneController : MonoBehaviour
 {
     [Header("UI References :")]
@@ -11,15 +12,21 @@ public class CutsceneController : MonoBehaviour
     [SerializeField] private UnityEngine.UI.Image backgroundPanel;
     [SerializeField] private GameObject continueIcon;
 
+
     [Header("Typewriter Settings :")]
     [SerializeField] private float typingSpeed = 0.05f;
+
 
     [Header("Audio Settings :")]
     [SerializeField] private AudioClip typingSound;
     [SerializeField] private AudioSource audioSource;
+    [SerializeField] private AudioClip backgroundMusic;
+    [SerializeField] private AudioSource musicSource;
+
 
     [Header("Sprite Setup :")]
     [SerializeField] private Sprite[] sprites; // 30 images
+
 
     [Header("Text Setup :")]
     [SerializeField] private string[] image1Texts = new string[3] { "Text 1.1", "Text 1.2", "Text 1.3" };
@@ -53,25 +60,35 @@ public class CutsceneController : MonoBehaviour
     [SerializeField] private string[] image29Texts = new string[3] { "Text 29.1", "Text 29.2", "Text 29.3" };
     [SerializeField] private string[] image30Texts = new string[2] { "Text 30.1", "Text 30.2" };
 
+
     [Header("Game Objects :")]
     [SerializeField] private GameObject cutsceneCanvas;
     [SerializeField] private CarController carController;
+
 
     [Header("Text-Only Settings :")]
     [SerializeField] private bool[] textOnlySlides = new bool[30];
     [SerializeField] private Vector2 textCenterPosition = new Vector2(0, 0);
 
+
     [Header("Normal Image Settings :")]
     [SerializeField] private Vector2 normalImageSize = new Vector2(1920, 1080);
+
 
     [Header("Cover Image Settings :")]
     [SerializeField][Range(0.1f, 3f)] private float coverScale = 1.5f;
     [SerializeField] private bool[] coverSlides = new bool[30];
 
+
     [Header("Background Colors :")]
     [SerializeField] private Color mainBackgroundColor = Color.black;
     [SerializeField] private Color blueBackgroundColor = new Color(0.063f, 0.051f, 0.631f);
     [SerializeField] private bool[] blueSlides = new bool[30];
+
+    [Header("Continue Icon Settings :")]
+    [SerializeField] private float continueIconOffsetY = -20f;
+    [SerializeField] private float continueIconOffsetX = 0f;
+
 
     private int currentImageIndex = 0;
     private int currentTextIndex = 0;
@@ -88,6 +105,8 @@ public class CutsceneController : MonoBehaviour
     private bool isTextComplete = false;
     private string currentFullText = "";
     private Coroutine typingCoroutine;
+    private RectTransform continueIconRect; // NEW
+
 
     private void Start()
     {
@@ -97,11 +116,13 @@ public class CutsceneController : MonoBehaviour
             backgroundPanel.color = mainBackgroundColor;
         }
 
+
         if (cutsceneText != null)
         {
             textRectTransform = cutsceneText.GetComponent<RectTransform>();
             originalTextPosition = textRectTransform.anchoredPosition;
         }
+
 
         if (cutsceneImage != null)
         {
@@ -110,6 +131,11 @@ public class CutsceneController : MonoBehaviour
             originalImageSize = imageRectTransform.sizeDelta;
             storedOriginalImage = true;
         }
+
+        // NEW: cache the continue icon's RectTransform once
+        if (continueIcon != null)
+            continueIconRect = continueIcon.GetComponent<RectTransform>();
+
 
         allTexts = new string[30][];
         allTexts[0] = image1Texts;
@@ -143,12 +169,26 @@ public class CutsceneController : MonoBehaviour
         allTexts[28] = image29Texts;
         allTexts[29] = image30Texts;
 
-        // Hide continue icon at start
+
         if (continueIcon != null)
             continueIcon.SetActive(false);
+        if (musicSource == null)
+            musicSource = gameObject.AddComponent<AudioSource>();
+
+
+        if (backgroundMusic != null)
+        {
+            musicSource.clip = backgroundMusic;
+            musicSource.loop = true;
+            musicSource.playOnAwake = false;
+            musicSource.enabled = true;
+            Debug.Log("Music source initialized with clip: " + backgroundMusic.name);
+        }
+
 
         StartCutscene();
     }
+
 
     private void StartCutscene()
     {
@@ -156,10 +196,10 @@ public class CutsceneController : MonoBehaviour
         currentImageIndex = 0;
         currentTextIndex = 0;
 
+
         if (cutsceneImage != null)
-        {
             cutsceneImage.enabled = true;
-        }
+
 
         if (imageRectTransform != null)
         {
@@ -170,13 +210,14 @@ public class CutsceneController : MonoBehaviour
             imageRectTransform.anchoredPosition = Vector2.zero;
         }
 
+
         if (carController != null)
-        {
             carController.enabled = false;
-        }
+
 
         ShowCurrentSlide();
     }
+
 
     private void ShowCurrentSlide()
     {
@@ -184,44 +225,34 @@ public class CutsceneController : MonoBehaviour
         bool isTextOnly = (currentImageIndex < textOnlySlides.Length && textOnlySlides[currentImageIndex]);
         bool isBlueSlide = (currentImageIndex < blueSlides.Length && blueSlides[currentImageIndex]);
 
+
         if (backgroundPanel != null)
-        {
             backgroundPanel.color = isBlueSlide ? blueBackgroundColor : mainBackgroundColor;
-        }
+
 
         if (isCoverSlide)
         {
             if (cutsceneImage != null && imageRectTransform != null)
             {
                 cutsceneImage.enabled = true;
-
-                // Scale image by coverScale multiplier
                 imageRectTransform.sizeDelta = originalImageSize * coverScale;
                 imageRectTransform.anchoredPosition = Vector2.zero;
                 imageRectTransform.anchorMin = new Vector2(0.5f, 0.5f);
                 imageRectTransform.anchorMax = new Vector2(0.5f, 0.5f);
 
+
                 if (currentImageIndex < sprites.Length && sprites[currentImageIndex] != null)
-                {
                     cutsceneImage.sprite = sprites[currentImageIndex];
-                }
             }
-            // Hide text for cover slides
             if (cutsceneText != null)
-            {
                 cutsceneText.text = "";
-            }
         }
         else if (isTextOnly)
         {
             if (cutsceneImage != null)
-            {
                 cutsceneImage.enabled = false;
-            }
             if (textRectTransform != null)
-            {
                 textRectTransform.anchoredPosition = textCenterPosition;
-            }
         }
         else
         {
@@ -233,18 +264,21 @@ public class CutsceneController : MonoBehaviour
                 imageRectTransform.anchorMin = new Vector2(0.5f, 0.5f);
                 imageRectTransform.anchorMax = new Vector2(0.5f, 0.5f);
 
+
                 if (currentImageIndex < sprites.Length && sprites[currentImageIndex] != null)
-                {
                     cutsceneImage.sprite = sprites[currentImageIndex];
-                }
             }
             if (textRectTransform != null)
-            {
                 textRectTransform.anchoredPosition = originalTextPosition;
-            }
         }
 
-        // Show text for non-cover slides
+
+        // Always hide the icon at the start of every slide
+        // It will be shown again (if allowed) once typing finishes
+        if (continueIcon != null)
+            continueIcon.SetActive(false);
+
+
         if (!isCoverSlide)
         {
             if (currentImageIndex < allTexts.Length && allTexts[currentImageIndex] != null)
@@ -252,50 +286,64 @@ public class CutsceneController : MonoBehaviour
                 if (currentTextIndex < allTexts[currentImageIndex].Length)
                 {
                     string textToType = allTexts[currentImageIndex][currentTextIndex];
-                    
-                    // Start typewriter effect
                     if (typingCoroutine != null)
                         StopCoroutine(typingCoroutine);
-                    typingCoroutine = StartCoroutine(TypeText(textToType));
+
+                    // NEW: pass isBlueSlide so the coroutine knows whether to show the icon
+                    typingCoroutine = StartCoroutine(TypeText(textToType, isBlueSlide));
                 }
             }
         }
+
+
+        if (currentImageIndex >= 16 && musicSource != null && !musicSource.isPlaying)
+        {
+            Debug.Log("Starting background music at image " + (currentImageIndex + 1));
+            musicSource.Play();
+        }
     }
+
 
     private void Update()
     {
         if (!cutsceneActive) return;
-
         if (Input.anyKeyDown)
-        {
             AdvanceSlide();
-        }
     }
+
 
     private void AdvanceSlide()
     {
-        // If still typing, skip to end of text
         if (isTyping)
         {
             if (typingCoroutine != null)
                 StopCoroutine(typingCoroutine);
-            
+
+
             cutsceneText.text = currentFullText;
             isTyping = false;
             isTextComplete = true;
-            
-            if (continueIcon != null)
+
+            // Only show icon if this is NOT a blue slide
+            bool isBlueSlide = (currentImageIndex < blueSlides.Length && blueSlides[currentImageIndex]);
+            if (continueIcon != null && !isBlueSlide)
+            {
+                PositionContinueIconUnderText();
                 continueIcon.SetActive(true);
-            
+            }
+
             return;
         }
 
+
         bool isFillScreen = (currentImageIndex == 0);
+
 
         if (isFillScreen)
         {
             currentImageIndex++;
             currentTextIndex = 0;
+
 
             if (currentImageIndex >= sprites.Length)
             {
@@ -303,11 +351,14 @@ public class CutsceneController : MonoBehaviour
                 return;
             }
 
+
             ShowCurrentSlide();
             return;
         }
 
+
         currentTextIndex++;
+
 
         if (currentImageIndex < allTexts.Length &&
             currentTextIndex >= allTexts[currentImageIndex].Length)
@@ -315,6 +366,7 @@ public class CutsceneController : MonoBehaviour
             currentImageIndex++;
             currentTextIndex = 0;
 
+
             if (currentImageIndex >= sprites.Length)
             {
                 EndCutscene();
@@ -322,41 +374,57 @@ public class CutsceneController : MonoBehaviour
             }
         }
 
+
         ShowCurrentSlide();
     }
+
 
     private void EndCutscene()
     {
         cutsceneActive = false;
 
+
         if (backgroundPanel != null)
-        {
             backgroundPanel.color = originalBackgroundColor;
-        }
+
 
         if (cutsceneCanvas != null)
-        {
             cutsceneCanvas.SetActive(false);
-        }
+
 
         Debug.Log("Cutscene ended, loading main game!");
-
-        // Switch to main game scene
         SceneManager.LoadScene("added-car");
     }
 
-    private System.Collections.IEnumerator TypeText(string text)
+
+    private void PositionContinueIconUnderText()
+    {
+        if (continueIconRect == null || textRectTransform == null || cutsceneText == null)
+            return;
+
+        cutsceneText.ForceMeshUpdate();
+
+        float renderedTextHeight = cutsceneText.preferredHeight;
+
+        // Place icon directly to the left of the text box, vertically centred on the text
+        float iconX = textRectTransform.anchoredPosition.x - 210f - (continueIconRect.rect.width * 0.5f);
+        float iconY = textRectTransform.anchoredPosition.y - (renderedTextHeight * 0.6f);
+
+        continueIconRect.anchoredPosition = new Vector2(iconX + continueIconOffsetX, iconY + continueIconOffsetY);
+    }
+
+    private System.Collections.IEnumerator TypeText(string text, bool isBlueSlide)
     {
         isTyping = true;
         isTextComplete = false;
         currentFullText = text;
         cutsceneText.text = "";
 
-        // Hide continue icon while typing
+
         if (continueIcon != null)
             continueIcon.SetActive(false);
 
-        // Type 3 characters at a time
+
         int i = 0;
         while (i < text.Length)
         {
@@ -364,20 +432,23 @@ public class CutsceneController : MonoBehaviour
             cutsceneText.text += text.Substring(i, count);
             i += 3;
 
-            // Play typing sound if assigned
+
             if (typingSound != null && audioSource != null)
-            {
                 audioSource.PlayOneShot(typingSound);
-            }
+
 
             yield return new WaitForSeconds(typingSpeed);
         }
 
+
         isTyping = false;
         isTextComplete = true;
 
-        // Show continue icon when done
-        if (continueIcon != null)
+        // NEW: only show the icon on non-blue slides, and position it properly
+        if (continueIcon != null && !isBlueSlide)
+        {
+            PositionContinueIconUnderText();
             continueIcon.SetActive(true);
+        }
     }
 }
