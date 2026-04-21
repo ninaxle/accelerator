@@ -20,6 +20,9 @@ public class CarController : MonoBehaviour
     [SerializeField] private float motorForce;
     [SerializeField] private float breakForce;
     [SerializeField] private float maxSteerAngle;
+    [SerializeField] private float maxSpeed = 30f;
+    
+    public float MaxSpeed => maxSpeed;
 
     [SerializeField] private WheelCollider frontLeftWheelCollider;
     [SerializeField] private WheelCollider frontRightWheelCollider;
