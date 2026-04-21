@@ -733,7 +733,7 @@ MonoBehaviour:
   backgroundMusic: {fileID: 8300000, guid: cae4961c55229403a991f51c073f1f45, type: 3}
   musicSource: {fileID: 1093744796}
   sprites:
-  - {fileID: 21300000, guid: ae99744612a3d443c919eafdfd3d4617, type: 3}
+  - {fileID: 21300000, guid: 8f6edaca75b3f447b9c16c10cc9c095b, type: 3}
   - {fileID: 21300000, guid: 6631694f571404520adcedcfd521e0de, type: 3}
   - {fileID: 21300000, guid: 6a7e91cfd456a445ebaf0b4ef2fd85c2, type: 3}
   - {fileID: 21300000, guid: 084ad6f3ee943418d8a3b3d276ff3e4e, type: 3}
