@@ -141,49 +141,38 @@ public class EnemyAi : MonoBehaviour
 
     private System.Collections.IEnumerator ScreenFadeToBlack()
     {
+        Debug.Log("ScreenFadeToBlack started!");
+
         if (gameOverPanel != null)
         {
             gameOverPanel.gameObject.SetActive(true);
-            Color panelColor = gameOverPanel.color;
-            panelColor.a = 0f;
-            gameOverPanel.color = panelColor;
 
-            float timer = 0f;
-            while (timer < fadeDuration)
+            Canvas parentCanvas = gameOverPanel.GetComponentInParent<Canvas>();
+            if (parentCanvas != null)
             {
-                timer += Time.deltaTime;
-                panelColor.a = Mathf.Lerp(0f, 1f, timer / fadeDuration);
-                gameOverPanel.color = panelColor;
-                yield return null;
+                parentCanvas.sortingOrder = 32767;
             }
 
-            panelColor.a = 1f;
-            gameOverPanel.color = panelColor;
-        }
-        else
-        {
-            GameObject fadeObj = new GameObject("FadeOverlay");
-            fadeObj.transform.SetParent(Camera.main.transform);
-            fadeObj.transform.localPosition = new Vector3(0f, 0f, 1f);
-            fadeObj.transform.localScale = new Vector3(100f, 100f, 1f);
-            fadeObj.transform.localRotation = Quaternion.identity;
-
-            fadeObj.AddComponent<MeshFilter>().mesh = CreateQuadMesh();
-            MeshRenderer mr = fadeObj.AddComponent<MeshRenderer>();
-            Material fadeMat = CreateBlackMaterial();
-            mr.material = fadeMat;
-
-            float timer = 0f;
-            while (timer < fadeDuration)
+            CanvasGroup canvasGroup = gameOverPanel.GetComponentInParent<CanvasGroup>();
+            if (canvasGroup == null)
             {
-                timer += Time.deltaTime;
-                float alpha = Mathf.Lerp(0f, 1f, timer / fadeDuration);
-                Color c = new Color(0f, 0f, 0f, alpha);
-                mr.material.SetColor("_Color", c);
-                yield return null;
+                if (parentCanvas != null)
+                {
+                    canvasGroup = parentCanvas.gameObject.AddComponent<CanvasGroup>();
+                }
             }
 
-            mr.material.SetColor("_Color", Color.black);
+            if (canvasGroup != null)
+            {
+                float timer = 0f;
+                while (timer < fadeDuration)
+                {
+                    timer += Time.unscaledDeltaTime;
+                    canvasGroup.alpha = Mathf.Clamp01(timer / fadeDuration);
+                    yield return null;
+                }
+                canvasGroup.alpha = 1f;
+            }
         }
 
         Debug.Log("GAME OVER");
