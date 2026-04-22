@@ -1,5 +1,7 @@
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.SceneManagement;
+using System.Collections;
 
 public class EnemyAi : MonoBehaviour
 {
@@ -12,12 +14,11 @@ public class EnemyAi : MonoBehaviour
 
     [SerializeField] private float catchDistance = 5f;
     [SerializeField] private GameObject diveEnemyPrefab;
-
     [SerializeField] private Vector3 diveOffset;
     [SerializeField] private Quaternion diveRotation;
-
     [SerializeField] private float chaseStartDistance = 50f;
     [SerializeField] private bool waitForPlayer = true;
+    [SerializeField] private float gameOverDelay = 3f;
 
     private void Awake()
     {
@@ -61,7 +62,6 @@ public class EnemyAi : MonoBehaviour
     private void Update()
     {
         if (hasTriggeredJumpscare) return;
-
         if (player == null) return;
 
         if (waitForPlayer && !hasStartedChase)
@@ -95,9 +95,7 @@ public class EnemyAi : MonoBehaviour
         agent.isStopped = true;
 
         if (playerCar != null)
-        {
             playerCar.enabled = false;
-        }
 
         Rigidbody carRb = player.GetComponent<Rigidbody>();
         if (carRb != null)
@@ -107,41 +105,42 @@ public class EnemyAi : MonoBehaviour
             carRb.isKinematic = true;
         }
 
+        StartCoroutine(LoadGameOverSceneAfterDelay());
+
         Destroy(gameObject);
 
         GameObject diveEnemy = GameObject.Find("DiveEnemy");
         Debug.Log("DiveEnemy found: " + (diveEnemy != null));
+
         if (diveEnemy != null)
         {
-            Debug.Log("Spawning DiveEnemy at: " + (player.position + diveOffset));
             Quaternion rot = diveRotation.eulerAngles != Vector3.zero ? diveRotation : Quaternion.identity;
             GameObject spawnedDive = Instantiate(diveEnemy, player.position + diveOffset, rot);
             spawnedDive.SetActive(true);
-            foreach (Renderer r in spawnedDive.GetComponentsInChildren<Renderer>())
-            {
-                r.enabled = true;
-            }
-            Animator anim = spawnedDive.GetComponent<Animator>();
-            if (anim != null)
-            {
-                anim.Play(0);
-            }
-            foreach (Animator a in spawnedDive.GetComponentsInChildren<Animator>())
-            {
-                a.Play(0);
-            }
-            Debug.Log("DiveEnemy spawned and activated");
-        }
 
-        GameOver gameOver = FindObjectOfType<GameOver>();
-        if (gameOver != null)
-        {
-            gameOver.TriggerGameOver();
-        }
+            foreach (Renderer r in spawnedDive.GetComponentsInChildren<Renderer>())
+                r.enabled = true;
+
+            Animator anim = spawnedDive.GetComponent<Animator>();
+            if (anim != null) anim.Play(0);
+
+            foreach (Animator a in spawnedDive.GetComponentsInChildren<Animator>())
+                a.Play(0);
+
+            Debug.Log("DiveEnemy spawned and activated");
+        }                                          // ← closes if (diveEnemy != null)
+
+        StartCoroutine(LoadGameOverSceneAfterDelay());
+    }                                              // ← closes TriggerCatchSequence
+
+    private IEnumerator LoadGameOverSceneAfterDelay()
+    {
+        yield return new WaitForSeconds(gameOverDelay);
+        SceneManager.LoadScene("game-over");
     }
 
     public void RestartGame()
     {
-        UnityEngine.SceneManagement.SceneManager.LoadScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene().name);
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
-}
+}                                                  // ← closes class
