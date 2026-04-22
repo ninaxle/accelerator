@@ -873,7 +873,7 @@ MonoBehaviour:
   mainBackgroundColor: {r: 0, g: 0, b: 0, a: 1}
   blueBackgroundColor: {r: 0.063, g: 0.051, b: 0.631, a: 1}
   blueSlides: 00000000000000000000010000000000010100
-  continueIconOffsetY: -20
+  continueIconOffsetY: -10
   continueIconOffsetX: 0
 --- !u!114 &1159059936
 MonoBehaviour:

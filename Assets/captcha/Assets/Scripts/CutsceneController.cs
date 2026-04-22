@@ -86,7 +86,7 @@ public class CutsceneController : MonoBehaviour
     [SerializeField] private bool[] blueSlides = new bool[30];
 
     [Header("Continue Icon Settings :")]
-    [SerializeField] private float continueIconOffsetY = -20f;
+    [SerializeField] private float continueIconOffsetY = -10f;
     [SerializeField] private float continueIconOffsetX = 0f;
 
 
