@@ -12,7 +12,7 @@ public class CarController : MonoBehaviour
     private float verticalInput;
     private float currentSteerAngle;
     private float currentbreakForce;
-    [SerializeField] private float boostMultiplier = 2f;  // 2x faster when boosting
+    [SerializeField] private float boostMultiplier = 4f;  // 4x faster when boosting
     private bool isBoosting;
 
     private bool isBreaking; //brake when space is pressed --will probs remove...
@@ -21,7 +21,7 @@ public class CarController : MonoBehaviour
     [SerializeField] private float breakForce;
     [SerializeField] private float maxSteerAngle;
     [SerializeField] private float maxSpeed = 30f;
-    
+
     public float MaxSpeed => maxSpeed;
 
     [SerializeField] private WheelCollider frontLeftWheelCollider;

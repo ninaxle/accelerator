@@ -8,6 +8,8 @@ public class EnemyAi : MonoBehaviour
     private Transform player;
     private CarController playerCar;
     private bool hasTriggeredJumpscare;
+    private bool hasStartedChase;
+    private Vector3 trackStartPosition;
 
     [SerializeField] private float catchDistance = 5f;
     [SerializeField] private GameObject diveEnemyPrefab;
@@ -17,6 +19,9 @@ public class EnemyAi : MonoBehaviour
     [SerializeField] private Vector3 diveOffset;
     [SerializeField] private Quaternion diveRotation;
 
+    [SerializeField] private float chaseStartDistance = 50f;
+    [SerializeField] private bool waitForPlayer = true;
+
     private void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
@@ -25,6 +30,7 @@ public class EnemyAi : MonoBehaviour
         if (player != null)
         {
             playerCar = player.GetComponent<CarController>();
+            trackStartPosition = player.position;
         }
     }
 
@@ -36,9 +42,9 @@ public class EnemyAi : MonoBehaviour
             return;
         }
 
-        agent.speed = playerCar.MaxSpeed * 0.5f;
+        agent.speed = playerCar.MaxSpeed * 0.2f;
 
-        Vector3 behindPlayer = player.position - player.forward * 50f;
+        Vector3 behindPlayer = player.position - player.forward * 200f;
         behindPlayer.y = player.position.y;
 
         NavMeshHit hit;
@@ -52,7 +58,7 @@ public class EnemyAi : MonoBehaviour
             transform.position = behindPlayer;
         }
 
-        agent.SetDestination(player.position);
+        agent.isStopped = true;
     }
 
     private void Update()
@@ -61,7 +67,24 @@ public class EnemyAi : MonoBehaviour
 
         if (player == null) return;
 
-        agent.SetDestination(player.position);
+        if (waitForPlayer && !hasStartedChase)
+        {
+            float playerDistance = Vector3.Distance(player.position, trackStartPosition);
+            if (playerDistance >= chaseStartDistance)
+            {
+                hasStartedChase = true;
+                agent.isStopped = false;
+                Vector3 behindPoint = player.position - player.forward * 10f;
+                agent.SetDestination(behindPoint);
+                Debug.Log("Enemy started chasing!");
+            }
+            return;
+        }
+
+        if (!hasStartedChase) return;
+
+        Vector3 behindTarget = player.position - player.forward * 10f;
+        agent.SetDestination(behindTarget);
 
         if (agent.remainingDistance <= catchDistance)
         {

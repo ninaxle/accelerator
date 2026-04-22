@@ -6057,8 +6057,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
-  m_Type: 1
+  m_Sprite: {fileID: 406455318, guid: ed8fdfdecd1274a7593f86ae94a735b7, type: 3}
+  m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
@@ -6568,7 +6568,7 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 8c55c9a721fa54461b027361ed3fa2b8,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 9.62
+      value: 55.6
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 8c55c9a721fa54461b027361ed3fa2b8,
         type: 3}
@@ -15675,9 +15675,9 @@ NavMeshAgent:
   m_AgentTypeID: 0
   m_Radius: 0.5
   m_Speed: 0
-  m_Acceleration: 8
+  m_Acceleration: 5
   avoidancePriority: 50
-  m_AngularSpeed: 10
+  m_AngularSpeed: 5
   m_StoppingDistance: 0
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
@@ -15698,12 +15698,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0d79b7d4e57994830b6d63951497d2f8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyAi
-  catchDistance: 5
+  catchDistance: 2
   diveEnemyPrefab: {fileID: 8491561}
   gameOverPanel: {fileID: 310579972}
   fadeDuration: 2
   diveOffset: {x: -0.3, y: 0.8, z: 0.8}
   diveRotation: {x: 0.5, y: 0, z: 0, w: 0.8660254}
+  chaseStartDistance: 50
+  waitForPlayer: 1
 --- !u!1 &978627408
 GameObject:
   m_ObjectHideFlags: 0
@@ -16072,7 +16074,7 @@ MonoBehaviour:
   motorForce: 200
   breakForce: 0
   maxSteerAngle: 10
-  maxSpeed: 30
+  maxSpeed: 100
   frontLeftWheelCollider: {fileID: 990091705}
   frontRightWheelCollider: {fileID: 1191484742}
   rearLeftWheelCollider: {fileID: 179824424}
@@ -16110,7 +16112,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 997224177}
   serializedVersion: 5
-  m_Mass: 1000
+  m_Mass: 3000
   m_LinearDamping: 0
   m_AngularDamping: 0.5
   m_CenterOfMass: {x: 0, y: -0.5, z: 0}
