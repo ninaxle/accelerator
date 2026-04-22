@@ -105,7 +105,7 @@ public class EnemyAi : MonoBehaviour
             carRb.isKinematic = true;
         }
 
-        StartCoroutine(LoadGameOverSceneAfterDelay());
+LoadGameOverSceneDelayed(gameOverDelay);
 
         Destroy(gameObject);
 
@@ -128,15 +128,20 @@ public class EnemyAi : MonoBehaviour
                 a.Play(0);
 
             Debug.Log("DiveEnemy spawned and activated");
-        }                                          // ← closes if (diveEnemy != null)
-
-        StartCoroutine(LoadGameOverSceneAfterDelay());
-    }                                              // ← closes TriggerCatchSequence
+        }
+    }
 
     private IEnumerator LoadGameOverSceneAfterDelay()
     {
         yield return new WaitForSeconds(gameOverDelay);
         SceneManager.LoadScene("game-over");
+    }
+
+    public static void LoadGameOverSceneDelayed(float delay)
+    {
+        GameObject helper = new GameObject("SceneLoader");
+       DontDestroyOnLoad(helper);
+        helper.AddComponent<SceneLoaderHelper>().StartDelay = delay;
     }
 
     public void RestartGame()
