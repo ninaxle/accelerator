@@ -1,6 +1,5 @@
 using UnityEngine;
 using UnityEngine.AI;
-using UnityEngine.UI;
 
 public class EnemyAi : MonoBehaviour
 {
@@ -13,8 +12,6 @@ public class EnemyAi : MonoBehaviour
 
     [SerializeField] private float catchDistance = 5f;
     [SerializeField] private GameObject diveEnemyPrefab;
-    [SerializeField] private Image gameOverPanel;
-    [SerializeField] private float fadeDuration = 2f;
 
     [SerializeField] private Vector3 diveOffset;
     [SerializeField] private Quaternion diveRotation;
@@ -136,74 +133,11 @@ public class EnemyAi : MonoBehaviour
             Debug.Log("DiveEnemy spawned and activated");
         }
 
-        StartCoroutine(ScreenFadeToBlack());
-    }
-
-    private System.Collections.IEnumerator ScreenFadeToBlack()
-    {
-        Debug.Log("ScreenFadeToBlack started!");
-
-        if (gameOverPanel != null)
+        GameOver gameOver = FindObjectOfType<GameOver>();
+        if (gameOver != null)
         {
-            gameOverPanel.gameObject.SetActive(true);
-
-            Canvas parentCanvas = gameOverPanel.GetComponentInParent<Canvas>();
-            if (parentCanvas != null)
-            {
-                parentCanvas.sortingOrder = 32767;
-            }
-
-            CanvasGroup canvasGroup = gameOverPanel.GetComponentInParent<CanvasGroup>();
-            if (canvasGroup == null)
-            {
-                if (parentCanvas != null)
-                {
-                    canvasGroup = parentCanvas.gameObject.AddComponent<CanvasGroup>();
-                }
-            }
-
-            if (canvasGroup != null)
-            {
-                float timer = 0f;
-                while (timer < fadeDuration)
-                {
-                    timer += Time.unscaledDeltaTime;
-                    canvasGroup.alpha = Mathf.Clamp01(timer / fadeDuration);
-                    yield return null;
-                }
-                canvasGroup.alpha = 1f;
-            }
+            gameOver.TriggerGameOver();
         }
-
-        Debug.Log("GAME OVER");
-    }
-
-    private Mesh CreateQuadMesh()
-    {
-        Mesh mesh = new Mesh();
-        mesh.vertices = new Vector3[] {
-            new Vector3(-0.5f, -0.5f, 0f),
-            new Vector3(0.5f, -0.5f, 0f),
-            new Vector3(0.5f, 0.5f, 0f),
-            new Vector3(-0.5f, 0.5f, 0f)
-        };
-        mesh.triangles = new int[] { 0, 2, 1, 0, 3, 2 };
-        mesh.uv = new Vector2[] {
-            new Vector2(0f, 0f), new Vector2(1f, 0f),
-            new Vector2(1f, 1f), new Vector2(0f, 1f)
-        };
-        return mesh;
-    }
-
-    private Material CreateBlackMaterial()
-    {
-        Shader shader = Shader.Find("UI/Default");
-        if (shader == null) shader = Shader.Find("Sprites/Default");
-        if (shader == null) shader = Shader.Find("Unlit/Transparent");
-        if (shader == null) shader = Shader.Find("Unlit/Color");
-        Material mat = new Material(shader);
-        mat.SetColor("_Color", Color.black);
-        return mat;
     }
 
     public void RestartGame()
