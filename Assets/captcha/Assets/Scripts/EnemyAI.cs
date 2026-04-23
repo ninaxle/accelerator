@@ -12,7 +12,7 @@ public class EnemyAi : MonoBehaviour
     private bool hasStartedChase;
     private Vector3 trackStartPosition;
     private AudioSource audioSource;
-    private AudioClip closerClip;
+    [SerializeField] private AudioClip closerClip;
     private float distanceThreshold = 10f;
     private int lastThresholdIndex;
     private float initialChaseDistance;
@@ -94,15 +94,10 @@ public class EnemyAi : MonoBehaviour
                 initialChaseDistance = Vector3.Distance(transform.position, player.position);
                 lastThresholdIndex = 0;
 
-#if UNITY_EDITOR
-                if (closerClip == null)
+if (closerClip == null)
                 {
-                    string[] guids = UnityEditor.AssetDatabase.FindAssets("closer t:AudioClip");
-                    if (guids.Length > 0)
-                        closerClip = UnityEditor.AssetDatabase.LoadAssetAtPath<AudioClip>(
-                            UnityEditor.AssetDatabase.GUIDToAssetPath(guids[0]));
+                    closerClip = Resources.Load<AudioClip>("closer");
                 }
-#endif
 
                 Debug.Log("Enemy started chasing!");
             }
