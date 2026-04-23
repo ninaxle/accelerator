@@ -61,7 +61,7 @@ public class CaptchaImage : MonoBehaviour
         GenerateCaptcha();
     }
 
-    private void GenerateCaptcha()
+    public void GenerateCaptcha()
     {
         // Reset selections
         for (int i = 0; i < selectedSlots.Length; i++)

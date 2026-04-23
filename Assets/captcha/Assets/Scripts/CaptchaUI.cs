@@ -28,7 +28,7 @@ public class CaptchaUI : MonoBehaviour
       uiSubmitButton.onClick.AddListener(Submit);
    }
 
-   private void GenerateCaptcha()
+   public void GenerateCaptcha()
    {
       currentCaptcha = captchaGenerator.Generate();
 

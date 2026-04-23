@@ -61,6 +61,11 @@ public class CaptchaTrigger : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Player") && !hasTriggered)
         {
+            if (uiGameObject != null && uiGameObject.activeSelf)
+            {
+                return;
+            }
+
             hasTriggered = true;
             captchaActive = true;
             if (carController != null) carController.enabled = false;
@@ -70,6 +75,21 @@ public class CaptchaTrigger : MonoBehaviour
 
     private void CompleteCaptcha()
     {
+        if (captchaComponent != null)
+        {
+            var type = captchaComponent.GetType();
+            PropertyInfo prop = type.GetProperty("IsSolved");
+            if (prop != null) prop.SetValue(captchaComponent, false, null);
+            else
+            {
+                FieldInfo field = type.GetField("IsSolved");
+                if (field != null) field.SetValue(captchaComponent, false);
+            }
+
+            MethodInfo generateMethod = type.GetMethod("GenerateCaptcha");
+            if (generateMethod != null) generateMethod.Invoke(captchaComponent, null);
+        }
+
         if (carController != null) carController.enabled = true;
         if (uiGameObject != null) uiGameObject.SetActive(false);
 
