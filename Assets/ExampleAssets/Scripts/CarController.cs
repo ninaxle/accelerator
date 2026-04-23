@@ -23,6 +23,9 @@ public class CarController : MonoBehaviour
     [SerializeField] private float maxSpeed = 30f;
 
     public float MaxSpeed => maxSpeed;
+    public float CurrentThrottle => verticalInput;
+    public float CurrentSpeedRatio => Mathf.Clamp01(verticalInput);
+    public bool IsBoosting => isBoosting;
 
     [SerializeField] private WheelCollider frontLeftWheelCollider;
     [SerializeField] private WheelCollider frontRightWheelCollider;
