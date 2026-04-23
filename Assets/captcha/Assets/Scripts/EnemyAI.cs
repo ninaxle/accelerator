@@ -11,6 +11,7 @@ public class EnemyAi : MonoBehaviour
     private bool hasTriggeredJumpscare;
     private bool hasStartedChase;
     private Vector3 trackStartPosition;
+    private AudioSource audioSource;
 
     [SerializeField] private float catchDistance = 5f;
     [SerializeField] private GameObject diveEnemyPrefab;
@@ -19,6 +20,15 @@ public class EnemyAi : MonoBehaviour
     [SerializeField] private float chaseStartDistance = 50f;
     [SerializeField] private bool waitForPlayer = true;
     [SerializeField] private float gameOverDelay = 3f;
+    [SerializeField] private AudioClip closerClip;
+    [SerializeField] private float distanceThreshold = 10f;
+    [SerializeField] private float minVolume = 0.3f;
+    [SerializeField] private float maxVolume = 1.0f;
+    [SerializeField] private float minPitch = 0.8f;
+    [SerializeField] private float maxPitch = 1.2f;
+
+    private int lastThresholdIndex;
+    private float initialChaseDistance;
 
     private void Awake()
     {
@@ -30,6 +40,12 @@ public class EnemyAi : MonoBehaviour
             playerCar = player.GetComponent<CarController>();
             trackStartPosition = player.position;
         }
+
+        audioSource = gameObject.AddComponent<AudioSource>();
+        audioSource.playOnAwake = false;
+        audioSource.spatialBlend = 1f;
+        audioSource.maxDistance = 100f;
+        audioSource.rolloffMode = AudioRolloffMode.Linear;
     }
 
     private void Start()
@@ -39,6 +55,16 @@ public class EnemyAi : MonoBehaviour
             Debug.LogError("EnemyAI: Player or PlayerCar not found!");
             return;
         }
+
+#if UNITY_EDITOR
+        if (closerClip == null)
+        {
+            string[] guids = UnityEditor.AssetDatabase.FindAssets("closer t:AudioClip");
+            if (guids.Length > 0)
+                closerClip = UnityEditor.AssetDatabase.LoadAssetAtPath<AudioClip>(
+                    UnityEditor.AssetDatabase.GUIDToAssetPath(guids[0]));
+        }
+#endif
 
         agent.speed = playerCar.MaxSpeed * 0.2f;
 
@@ -73,6 +99,8 @@ public class EnemyAi : MonoBehaviour
                 agent.isStopped = false;
                 Vector3 behindPoint = player.position - player.forward * 10f;
                 agent.SetDestination(behindPoint);
+                initialChaseDistance = Vector3.Distance(transform.position, player.position);
+                lastThresholdIndex = 0;
                 Debug.Log("Enemy started chasing!");
             }
             return;
@@ -83,7 +111,22 @@ public class EnemyAi : MonoBehaviour
         Vector3 behindTarget = player.position - player.forward * 10f;
         agent.SetDestination(behindTarget);
 
-        if (agent.remainingDistance <= catchDistance)
+        float currentDistance = agent.remainingDistance;
+        int currentThresholdIndex = Mathf.FloorToInt((initialChaseDistance - currentDistance) / distanceThreshold);
+
+        if (currentThresholdIndex > lastThresholdIndex)
+        {
+            lastThresholdIndex = currentThresholdIndex;
+
+            float distanceRatio = 1f - Mathf.Clamp01(currentDistance / initialChaseDistance);
+            float volume = Mathf.Lerp(minVolume, maxVolume, distanceRatio);
+            float pitch = Mathf.Lerp(minPitch, maxPitch, distanceRatio);
+
+            audioSource.pitch = pitch;
+            audioSource.PlayOneShot(closerClip, volume);
+        }
+
+        if (currentDistance <= catchDistance)
         {
             TriggerCatchSequence();
         }

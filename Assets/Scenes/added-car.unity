@@ -14636,7 +14636,13 @@ MonoBehaviour:
   diveRotation: {x: 0.5, y: 0, z: 0, w: 0.8660254}
   chaseStartDistance: 50
   waitForPlayer: 1
-  gameOverDelay: 3
+  gameOverDelay: 2
+  closerClip: {fileID: 8300000, guid: 4729016430e694f06aaa915d1bfc3de1, type: 3}
+  distanceThreshold: 10
+  minVolume: 0.3
+  maxVolume: 1
+  minPitch: 0.8
+  maxPitch: 1.2
 --- !u!1 &978627408
 GameObject:
   m_ObjectHideFlags: 0
