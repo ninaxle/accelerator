@@ -18,7 +18,7 @@ public class CarAudioController : MonoBehaviour
     [SerializeField] private float fadeSpeed = 5f;
     [SerializeField] private float basePitch = 1f;
     [SerializeField] private float pitchRange = 0.3f;
-    [SerializeField] private float maxVolume = 0.1f;
+    [SerializeField] private float maxVolume = 0.02f;
 
     private CarController carController;
     private bool hasStarted = false;

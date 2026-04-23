@@ -87,6 +87,21 @@ public class GameOver : MonoBehaviour
             yield return null;
         }
         fadeImage.color = Color.black;
+
+        GameObject textObj = new GameObject("GameOverText");
+        textObj.transform.SetParent(canvasObj.transform, false);
+        RectTransform textRect = textObj.AddComponent<RectTransform>();
+        textRect.anchorMin = new Vector2(0.5f, 0.5f);
+        textRect.anchorMax = new Vector2(0.5f, 0.5f);
+        textRect.anchoredPosition = Vector2.zero;
+        textRect.sizeDelta = new Vector2(400f, 100f);
+
+        UnityEngine.UI.Text text = textObj.AddComponent<UnityEngine.UI.Text>();
+        text.text = "GAME OVER";
+        text.font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
+        text.fontSize = 60;
+        text.color = Color.white;
+        text.alignment = TextAnchor.MiddleCenter;
     }
 }
 

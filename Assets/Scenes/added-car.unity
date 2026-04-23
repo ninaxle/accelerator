@@ -5154,7 +5154,7 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 29ee778be5654470f9e0be89014d3c4d,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1082271958561512970, guid: 29ee778be5654470f9e0be89014d3c4d,
         type: 3}
@@ -14777,12 +14777,8 @@ MonoBehaviour:
   chaseStartDistance: 50
   waitForPlayer: 1
   gameOverDelay: 2
-  closerClip: {fileID: 8300000, guid: 4729016430e694f06aaa915d1bfc3de1, type: 3}
-  distanceThreshold: 10
-  minVolume: 0.3
-  maxVolume: 1
-  minPitch: 0.8
-  maxPitch: 1.2
+  enemyMinVolume: 0.02
+  enemyMaxVolume: 0.1
 --- !u!1 &978627408
 GameObject:
   m_ObjectHideFlags: 0
@@ -15148,10 +15144,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CarController
   boostMultiplier: 3
-  motorForce: 200
+  motorForce: 500
   breakForce: 0
-  maxSteerAngle: 10
-  maxSpeed: 100
+  maxSteerAngle: 40
+  maxSpeed: 300
   rb: {fileID: 0}
   frontLeftWheelCollider: {fileID: 990091705}
   frontRightWheelCollider: {fileID: 1191484742}
@@ -15180,8 +15176,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1.08, y: 1.2263778, z: 4.7388916}
-  m_Center: {x: 0, y: 0.408189, z: -0.089939594}
+  m_Size: {x: 1.08, y: 1.17, z: 4.7388916}
+  m_Center: {x: 0, y: 0.3, z: -0.089939594}
 --- !u!54 &997224182
 Rigidbody:
   m_ObjectHideFlags: 0

@@ -12,6 +12,10 @@ public class EnemyAi : MonoBehaviour
     private bool hasStartedChase;
     private Vector3 trackStartPosition;
     private AudioSource audioSource;
+    private AudioClip closerClip;
+    private float distanceThreshold = 10f;
+    private int lastThresholdIndex;
+    private float initialChaseDistance;
 
     [SerializeField] private float catchDistance = 5f;
     [SerializeField] private GameObject diveEnemyPrefab;
@@ -20,15 +24,8 @@ public class EnemyAi : MonoBehaviour
     [SerializeField] private float chaseStartDistance = 50f;
     [SerializeField] private bool waitForPlayer = true;
     [SerializeField] private float gameOverDelay = 3f;
-    [SerializeField] private AudioClip closerClip;
-    [SerializeField] private float distanceThreshold = 10f;
-    [SerializeField] private float minVolume = 0.3f;
-    [SerializeField] private float maxVolume = 1.0f;
-    [SerializeField] private float minPitch = 0.8f;
-    [SerializeField] private float maxPitch = 1.2f;
-
-    private int lastThresholdIndex;
-    private float initialChaseDistance;
+    [SerializeField] private float enemyMinVolume = 0.02f;
+    [SerializeField] private float enemyMaxVolume = 0.1f;
 
     private void Awake()
     {
@@ -56,17 +53,9 @@ public class EnemyAi : MonoBehaviour
             return;
         }
 
-#if UNITY_EDITOR
-        if (closerClip == null)
-        {
-            string[] guids = UnityEditor.AssetDatabase.FindAssets("closer t:AudioClip");
-            if (guids.Length > 0)
-                closerClip = UnityEditor.AssetDatabase.LoadAssetAtPath<AudioClip>(
-                    UnityEditor.AssetDatabase.GUIDToAssetPath(guids[0]));
-        }
-#endif
-
         agent.speed = playerCar.MaxSpeed * 0.2f;
+        float maxEnemySpeed = playerCar.MaxSpeed * 0.9f;
+        agent.speed = Mathf.Min(agent.speed, maxEnemySpeed);
 
         Vector3 behindPlayer = player.position - player.forward * 200f;
         behindPlayer.y = player.position.y;
@@ -97,10 +86,25 @@ public class EnemyAi : MonoBehaviour
             {
                 hasStartedChase = true;
                 agent.isStopped = false;
-                Vector3 behindPoint = player.position - player.forward * 10f;
-                agent.SetDestination(behindPoint);
+                Vector3 behindPoint = player.position - player.forward * 30f;
+                NavMeshHit startHit;
+                if (NavMesh.SamplePosition(behindPoint, out startHit, 5f, NavMesh.AllAreas))
+                {
+                    agent.SetDestination(startHit.position);
+                }
                 initialChaseDistance = Vector3.Distance(transform.position, player.position);
                 lastThresholdIndex = 0;
+
+#if UNITY_EDITOR
+                if (closerClip == null)
+                {
+                    string[] guids = UnityEditor.AssetDatabase.FindAssets("closer t:AudioClip");
+                    if (guids.Length > 0)
+                        closerClip = UnityEditor.AssetDatabase.LoadAssetAtPath<AudioClip>(
+                            UnityEditor.AssetDatabase.GUIDToAssetPath(guids[0]));
+                }
+#endif
+
                 Debug.Log("Enemy started chasing!");
             }
             return;
@@ -108,8 +112,12 @@ public class EnemyAi : MonoBehaviour
 
         if (!hasStartedChase) return;
 
-        Vector3 behindTarget = player.position - player.forward * 10f;
-        agent.SetDestination(behindTarget);
+        Vector3 behindTarget = player.position - player.forward * 30f;
+        NavMeshHit hit;
+        if (NavMesh.SamplePosition(behindTarget, out hit, 5f, NavMesh.AllAreas))
+        {
+            agent.SetDestination(hit.position);
+        }
 
         float currentDistance = agent.remainingDistance;
         int currentThresholdIndex = Mathf.FloorToInt((initialChaseDistance - currentDistance) / distanceThreshold);
@@ -119,14 +127,13 @@ public class EnemyAi : MonoBehaviour
             lastThresholdIndex = currentThresholdIndex;
 
             float distanceRatio = 1f - Mathf.Clamp01(currentDistance / initialChaseDistance);
-            float volume = Mathf.Lerp(minVolume, maxVolume, distanceRatio);
-            float pitch = Mathf.Lerp(minPitch, maxPitch, distanceRatio);
+            float volume = Mathf.Lerp(enemyMinVolume, enemyMaxVolume, distanceRatio);
 
-            audioSource.pitch = pitch;
-            audioSource.PlayOneShot(closerClip, volume);
+            if (closerClip != null)
+                audioSource.PlayOneShot(closerClip, volume);
         }
 
-        if (currentDistance <= catchDistance)
+        if (agent.remainingDistance <= catchDistance)
         {
             TriggerCatchSequence();
         }
@@ -148,13 +155,7 @@ public class EnemyAi : MonoBehaviour
             carRb.isKinematic = true;
         }
 
-LoadGameOverSceneDelayed(gameOverDelay);
-
-        Destroy(gameObject);
-
         GameObject diveEnemy = GameObject.Find("DiveEnemy");
-        Debug.Log("DiveEnemy found: " + (diveEnemy != null));
-
         if (diveEnemy != null)
         {
             Quaternion rot = diveRotation.eulerAngles != Vector3.zero ? diveRotation : Quaternion.identity;
@@ -164,27 +165,22 @@ LoadGameOverSceneDelayed(gameOverDelay);
             foreach (Renderer r in spawnedDive.GetComponentsInChildren<Renderer>())
                 r.enabled = true;
 
-            Animator anim = spawnedDive.GetComponent<Animator>();
-            if (anim != null) anim.Play(0);
-
             foreach (Animator a in spawnedDive.GetComponentsInChildren<Animator>())
                 a.Play(0);
-
-            Debug.Log("DiveEnemy spawned and activated");
         }
-    }
+
+        // Create a temporary runner that survives the Destroy, then hand off the coroutine
+        GameObject runner = new GameObject("GameOverRunner");
+        DontDestroyOnLoad(runner);
+        runner.AddComponent<GameOverRunner>().StartGameOver(gameOverDelay);
+
+        Destroy(gameObject); // ✅ safe now — runner handles the rest
+    }                                      // ← closes TriggerCatchSequence
 
     private IEnumerator LoadGameOverSceneAfterDelay()
     {
         yield return new WaitForSeconds(gameOverDelay);
         SceneManager.LoadScene("game-over");
-    }
-
-    public static void LoadGameOverSceneDelayed(float delay)
-    {
-        GameObject helper = new GameObject("SceneLoader");
-       DontDestroyOnLoad(helper);
-        helper.AddComponent<SceneLoaderHelper>().StartDelay = delay;
     }
 
     public void RestartGame()
