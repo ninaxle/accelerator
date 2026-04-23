@@ -66,6 +66,9 @@ public class NewsOpener : MonoBehaviour
             CarController car = player.GetComponent<CarController>();
             if (car != null) car.enabled = false;
         }
+        
+        if (GameManager.Instance != null)
+            GameManager.Instance.OnNoteCollected();
     }
 
     void ClosePopup()

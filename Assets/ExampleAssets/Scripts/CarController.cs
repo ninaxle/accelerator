@@ -26,7 +26,9 @@ public class CarController : MonoBehaviour
     public float CurrentThrottle => verticalInput;
     public float CurrentSpeedRatio => Mathf.Clamp01(verticalInput);
     public bool IsBoosting => isBoosting;
+    public bool IsFrozen { get; private set; }
 
+    [SerializeField] private Rigidbody rb;
     [SerializeField] private WheelCollider frontLeftWheelCollider;
     [SerializeField] private WheelCollider frontRightWheelCollider;
     [SerializeField] private WheelCollider rearLeftWheelCollider;
@@ -37,11 +39,19 @@ public class CarController : MonoBehaviour
     [SerializeField] private Transform rearLeftWheelTransform;
     [SerializeField] private Transform rearRightWheelTransform;
 
+    private void Awake()
+    {
+        if (rb == null)
+            rb = GetComponent<Rigidbody>();
+    }
+
     private void FixedUpdate()
     {
+        if (IsFrozen) return;
+        
         GetInput();
         HandleMotor();
-        HandleSteering(); //rotate the wheels
+        HandleSteering();
         UpdateWheels();
     }
 
@@ -95,5 +105,19 @@ public class CarController : MonoBehaviour
 ; wheelCollider.GetWorldPose(out pos, out rot);
         wheelTransform.rotation = rot;
         wheelTransform.position = pos;
+    }
+
+    public void Freeze()
+    {
+        IsFrozen = true;
+        rb.isKinematic = true;
+        frontLeftWheelCollider.motorTorque = 0;
+        frontRightWheelCollider.motorTorque = 0;
+        rearLeftWheelCollider.motorTorque = 0;
+        rearRightWheelCollider.motorTorque = 0;
+        frontLeftWheelCollider.brakeTorque = breakForce * 10;
+        frontRightWheelCollider.brakeTorque = breakForce * 10;
+        rearLeftWheelCollider.brakeTorque = breakForce * 10;
+        rearRightWheelCollider.brakeTorque = breakForce * 10;
     }
 }
