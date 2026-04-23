@@ -53,9 +53,8 @@ public class EnemyAi : MonoBehaviour
             return;
         }
 
-        agent.speed = playerCar.MaxSpeed * 0.2f;
         float maxEnemySpeed = playerCar.MaxSpeed * 0.9f;
-        agent.speed = Mathf.Min(agent.speed, maxEnemySpeed);
+        agent.speed = maxEnemySpeed;
 
         Vector3 behindPlayer = player.position - player.forward * 200f;
         behindPlayer.y = player.position.y;
@@ -112,7 +111,21 @@ public class EnemyAi : MonoBehaviour
 
         if (!hasStartedChase) return;
 
+        Vector3 toEnemy = transform.position - player.position;
+        float forwardComponent = Vector3.Dot(toEnemy, player.forward);
+        float lateralComponent = Vector3.Dot(toEnemy, player.right);
+
+        bool enemyIsBehind = forwardComponent > -2f;
+        bool enemyIsBehindLaterally = Mathf.Abs(lateralComponent) < 3f;
+
+        if (enemyIsBehind && enemyIsBehindLaterally)
+        {
+            TriggerCatchSequence();
+            return;
+        }
+
         Vector3 behindTarget = player.position - player.forward * 30f;
+
         NavMeshHit hit;
         if (NavMesh.SamplePosition(behindTarget, out hit, 5f, NavMesh.AllAreas))
         {
@@ -136,6 +149,24 @@ public class EnemyAi : MonoBehaviour
         if (agent.remainingDistance <= catchDistance)
         {
             TriggerCatchSequence();
+            return;
+        }
+
+        float carSpeed = 0f;
+        if (playerCar != null)
+        {
+            Rigidbody carRb = player.GetComponent<Rigidbody>();
+            carSpeed = carRb != null ? carRb.linearVelocity.magnitude : 0f;
+        }
+        float distToBehindTarget = Vector3.Distance(transform.position, behindTarget);
+
+        if (distToBehindTarget < 5f && carSpeed < 1f)
+        {
+            agent.isStopped = true;
+        }
+        else
+        {
+            agent.isStopped = false;
         }
     }
 

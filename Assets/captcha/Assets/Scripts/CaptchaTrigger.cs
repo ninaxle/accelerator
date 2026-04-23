@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Reflection;
+using System.Collections;
 
 public class CaptchaTrigger : MonoBehaviour
 {
@@ -9,6 +10,8 @@ public class CaptchaTrigger : MonoBehaviour
     private bool captchaActive = false;
     private bool hasTriggered = false;
     private MonoBehaviour captchaComponent;
+    private float enemyFreezeTime = 10f;
+    private Coroutine enemyUnfreezeCoroutine;
 
     private void Start()
     {
@@ -70,11 +73,67 @@ public class CaptchaTrigger : MonoBehaviour
             captchaActive = true;
             if (carController != null) carController.enabled = false;
             if (uiGameObject != null) uiGameObject.SetActive(true);
+
+            FreezeEnemies();
+            enemyUnfreezeCoroutine = StartCoroutine(UnfreezeEnemiesAfterDelay());
+        }
+    }
+
+    private void FreezeEnemies()
+    {
+        EnemyAi[] enemies = FindObjectsOfType<EnemyAi>();
+        foreach (EnemyAi enemy in enemies)
+        {
+            var agentField = typeof(EnemyAi).GetField("agent", BindingFlags.NonPublic | BindingFlags.Instance);
+            if (agentField != null)
+            {
+                UnityEngine.AI.NavMeshAgent agent = agentField.GetValue(enemy) as UnityEngine.AI.NavMeshAgent;
+                if (agent != null) agent.isStopped = true;
+            }
+        }
+    }
+
+    private IEnumerator UnfreezeEnemiesAfterDelay()
+    {
+        yield return new WaitForSeconds(enemyFreezeTime);
+        UnfreezeEnemies();
+    }
+
+    private void UnfreezeEnemies()
+    {
+        EnemyAi[] enemies = FindObjectsOfType<EnemyAi>();
+        foreach (EnemyAi enemy in enemies)
+        {
+            var agentField = typeof(EnemyAi).GetField("agent", BindingFlags.NonPublic | BindingFlags.Instance);
+            if (agentField != null)
+            {
+                UnityEngine.AI.NavMeshAgent agent = agentField.GetValue(enemy) as UnityEngine.AI.NavMeshAgent;
+                if (agent != null)
+                {
+                    agent.isStopped = false;
+                    var chaseStartField = typeof(EnemyAi).GetField("chaseStartDistance", BindingFlags.NonPublic | BindingFlags.Instance);
+                    if (chaseStartField != null)
+                    {
+                        float chaseStartDistance = (float)chaseStartField.GetValue(enemy);
+                        if (chaseStartDistance > 0)
+                        {
+                            var hasStartedChaseField = typeof(EnemyAi).GetField("hasStartedChase", BindingFlags.NonPublic | BindingFlags.Instance);
+                            if (hasStartedChaseField != null) hasStartedChaseField.SetValue(enemy, true);
+                        }
+                    }
+                }
+            }
         }
     }
 
     private void CompleteCaptcha()
     {
+        if (enemyUnfreezeCoroutine != null)
+        {
+            StopCoroutine(enemyUnfreezeCoroutine);
+            enemyUnfreezeCoroutine = null;
+        }
+
         if (captchaComponent != null)
         {
             var type = captchaComponent.GetType();
@@ -92,6 +151,8 @@ public class CaptchaTrigger : MonoBehaviour
 
         if (carController != null) carController.enabled = true;
         if (uiGameObject != null) uiGameObject.SetActive(false);
+
+        UnfreezeEnemies();
 
         Debug.Log("Success! Destroying Trigger.");
         Destroy(gameObject);
