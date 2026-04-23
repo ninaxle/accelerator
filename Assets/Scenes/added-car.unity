@@ -14775,7 +14775,7 @@ MonoBehaviour:
   diveEnemyPrefab: {fileID: 8491561}
   diveOffset: {x: -0.3, y: 0.8, z: 0.8}
   diveRotation: {x: 0.5, y: 0, z: 0, w: 0.8660254}
-  chaseStartDistance: 50
+  chaseStartDistance: 100
   waitForPlayer: 1
   gameOverDelay: 2
   enemyMinVolume: 0.3
